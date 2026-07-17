@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>答案構成ドリル　完全版｜基本7法・全35事例</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600;700&family=Zen+Kaku+Gothic+New:wght@500;700;900&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap');
+
+  :root{
+    --blue-deep:#0f2438;
+    --blue-mid:#1c3d5e;
+    --blue-line:#3a6690;
+    --paper:#f4f7f9;
+    --grid:#dfe9ef;
+    --ink:#132433;
+    --copper:#c17a3f;
+    --copper-dark:#9c5f2c;
+    --ok:#2f6b52;
+    --ng:#a8323a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:linear-gradient(var(--blue-deep), var(--blue-mid));
+    font-family:"Noto Sans JP",sans-serif;
+    color:var(--ink);
+    min-height:100vh;
+    padding:30px 14px 70px;
+  }
+
+  .app-header{ text-align:center; color:#dce8f2; margin-bottom:22px; }
+  .app-header .eyebrow{
+    font-family:"JetBrains Mono",monospace;
+    font-size:.66rem; letter-spacing:.3em; color:var(--copper); margin-bottom:10px;
+  }
+  .app-header h1{ font-family:"Shippori Mincho",serif; font-size:1.45rem; margin:0 0 8px; font-weight:700; }
+  .app-header p{ font-size:.8rem; color:#a9c1d4; margin:0 auto; max-width:480px; line-height:1.7; }
+
+  .app-wrap{ max-width:680px; margin:0 auto; }
+
+  .stats-bar{
+    display:flex; justify-content:center; gap:10px; margin-bottom:20px; flex-wrap:wrap;
+  }
+  .stats-chip{
+    background:rgba(255,255,255,.08); color:#cfe0ee; border:1px solid rgba(255,255,255,.2);
+    font-family:"JetBrains Mono",monospace; font-size:.72rem; padding:5px 12px; border-radius:14px;
+  }
+
+  .subject-group{ margin-bottom:22px; }
+  .subject-group-head{
+    display:flex; align-items:center; gap:10px; margin-bottom:10px; padding-left:2px;
+  }
+  .subject-group-head .sg-icon{
+    width:26px; height:26px; border-radius:50%; background:var(--copper); color:#fff;
+    display:flex; align-items:center; justify-content:center; font-family:"JetBrains Mono",monospace;
+    font-size:.72rem; font-weight:700; flex-shrink:0;
+  }
+  .subject-group-head h3{
+    font-family:"Shippori Mincho",serif; font-size:1.02rem; color:#e8f0f6; margin:0; font-weight:700;
+  }
+  .subject-group-head .sg-count{
+    font-family:"JetBrains Mono",monospace; font-size:.68rem; color:#8fa8bd;
+  }
+
+  .problem-menu{ display:grid; gap:10px; }
+  .problem-card{
+    background:var(--paper);
+    background-image:linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size:14px 14px;
+    border:2px solid var(--blue-line);
+    border-radius:4px;
+    padding:14px 16px;
+    cursor:pointer;
+    display:flex; align-items:center; gap:12px;
+    transition:transform .12s, box-shadow .12s;
+    position:relative;
+  }
+  .problem-card:hover{ transform:translateY(-2px); box-shadow:0 10px 22px rgba(0,0,0,.35); }
+  .problem-card .p-num{
+    font-family:"JetBrains Mono",monospace; font-size:1.1rem; font-weight:700; color:var(--copper);
+    flex-shrink:0; width:30px; text-align:center;
+  }
+  .problem-card .p-info{ flex:1; min-width:0; }
+  .problem-card .p-title{ font-family:"Shippori Mincho",serif; font-size:.95rem; font-weight:700; margin-bottom:3px; }
+  .problem-card .p-desc{ font-size:.76rem; color:#4a5a68; line-height:1.55; }
+  .problem-card .done-badge{
+    position:absolute; top:10px; right:10px; background:var(--ok); color:#fff;
+    font-family:"JetBrains Mono",monospace; font-size:.6rem; font-weight:700;
+    padding:2px 7px; border-radius:10px; display:none;
+  }
+  .problem-card.done .done-badge{ display:block; }
+
+  /* ===== 組み立てボード ===== */
+  .board{
+    background:var(--paper);
+    background-image:linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size:14px 14px;
+    border:2px solid var(--blue-line);
+    border-radius:4px;
+    padding:22px 22px 26px;
+  }
+  .back-link{
+    display:inline-block; font-family:"JetBrains Mono",monospace; font-size:.72rem;
+    color:var(--copper-dark); text-decoration:none; margin-bottom:14px; cursor:pointer;
+    border:none; background:none; padding:0;
+  }
+  .back-link:hover{ text-decoration:underline; }
+  .board-head{
+    display:flex; justify-content:space-between; align-items:center;
+    border-bottom:2px solid var(--blue-deep); padding-bottom:12px; margin-bottom:18px;
+  }
+  .board-head .p-tag{ font-family:"JetBrains Mono",monospace; font-size:.68rem; color:var(--copper-dark); margin-bottom:4px; }
+  .board-head h2{ font-family:"Shippori Mincho",serif; font-size:1.05rem; margin:0; }
+  .timer{
+    font-family:"JetBrains Mono",monospace; font-size:1rem; font-weight:700; color:var(--blue-deep);
+    background:#fff; border:1.5px solid var(--blue-line); padding:5px 12px; border-radius:4px;
+  }
+  .fact-block{
+    background:#fff; border:1.5px solid var(--blue-line); border-radius:4px;
+    padding:14px 18px; font-size:.87rem; line-height:1.85; margin-bottom:20px;
+  }
+  .fact-block .fact-label{
+    font-family:"JetBrains Mono",monospace; font-size:.66rem; color:var(--copper-dark);
+    letter-spacing:.1em; margin-bottom:6px; display:block;
+  }
+  .blueprint{ margin-bottom:20px; }
+  .bp-slot{
+    border:2px dashed #b9c9d6; border-radius:4px; padding:12px 16px; margin-bottom:10px;
+    font-size:.85rem; line-height:1.8; color:#8898a6; transition:all .3s;
+  }
+  .bp-slot .bp-label{
+    font-family:"JetBrains Mono",monospace; font-size:.65rem; font-weight:700;
+    letter-spacing:.1em; margin-bottom:4px; display:block; color:#8898a6;
+  }
+  .bp-slot.filled{ border:2px solid var(--ok); background:#eef6f1; color:var(--ink); animation:snapIn .3s ease; }
+  .bp-slot.filled .bp-label{ color:var(--ok); }
+  @keyframes snapIn{ 0%{transform:scale(.96);opacity:.4;} 60%{transform:scale(1.02);} 100%{transform:scale(1);opacity:1;} }
+  .step-label{
+    font-family:"JetBrains Mono",monospace; font-size:.7rem; letter-spacing:.12em;
+    color:var(--copper); margin-bottom:8px; display:flex; align-items:center; gap:8px;
+  }
+  .step-label .step-num{
+    background:var(--copper); color:#fff; width:20px; height:20px; border-radius:50%;
+    display:inline-flex; align-items:center; justify-content:center; font-size:.7rem;
+  }
+  .step-instruction{ font-family:"Shippori Mincho",serif; font-size:1rem; font-weight:700; margin-bottom:14px; }
+  .choices{ display:grid; gap:10px; margin-bottom:18px; }
+  .choice-btn{
+    text-align:left; background:#fff; border:1.5px solid var(--blue-line); border-radius:4px;
+    padding:12px 14px; cursor:pointer; font-size:.82rem; line-height:1.7; color:var(--ink);
+    transition:border-color .15s, box-shadow .15s, transform .1s;
+  }
+  .choice-btn:hover:not(:disabled){ border-color:var(--copper); box-shadow:0 3px 10px rgba(0,0,0,.1); transform:translateY(-1px); }
+  .choice-btn:disabled{ cursor:default; }
+  .choice-btn.correct{ border-color:var(--ok); background:#eef6f1; }
+  .choice-btn.wrong{ border-color:var(--ng); background:#f9eeee; opacity:.7; }
+  .hint-card{
+    display:none; background:#f9eeee; border:1.5px dashed var(--ng); border-radius:4px;
+    padding:12px 16px; margin-bottom:16px; font-size:.81rem; line-height:1.75;
+  }
+  .hint-card.show{ display:block; }
+  .hint-card .hint-tag{
+    display:inline-block; font-family:"JetBrains Mono",monospace; font-size:.64rem; font-weight:700;
+    background:var(--ng); color:#fff; padding:2px 8px; border-radius:2px; margin-bottom:6px;
+  }
+  .complete-screen{ display:none; }
+  .complete-screen.show{ display:block; }
+  .complete-title{ font-family:"Shippori Mincho",serif; font-size:1.15rem; text-align:center; margin-bottom:6px; }
+  .complete-time{ text-align:center; font-family:"JetBrains Mono",monospace; font-size:.83rem; color:var(--copper-dark); margin-bottom:20px; }
+  .final-answer{ background:#fff; border:2px solid var(--ok); border-radius:4px; padding:18px 20px; margin-bottom:18px; }
+  .final-answer .fa-slot{ margin-bottom:14px; font-size:.85rem; line-height:1.85; }
+  .final-answer .fa-label{
+    font-family:"JetBrains Mono",monospace; font-size:.66rem; font-weight:700; color:var(--ok);
+    letter-spacing:.08em; margin-bottom:4px; display:block;
+  }
+  .next-btn{
+    width:100%; background:var(--blue-deep); color:#dce8f2; border:none; border-radius:4px;
+    padding:13px; font-family:"JetBrains Mono",monospace; font-size:.85rem; font-weight:700;
+    letter-spacing:.05em; cursor:pointer; transition:background .15s;
+  }
+  .next-btn:hover{ background:#132c42; }
+  .proto-note{ max-width:680px; margin:22px auto 0; color:#a9c1d4; font-size:.72rem; text-align:center; line-height:1.8; }
+
+  @media(max-width:480px){
+    .board{ padding:16px 14px 20px; }
+    .app-header h1{ font-size:1.15rem; }
+    .step-instruction{ font-size:.92rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <div class="eyebrow">ANSWER BLUEPRINT DRILL ・ COMPLETE EDITION</div>
+  <h1>答案構成ドリル　完全版</h1>
+  <p>基本7法×各5事例、全35問。問題提起→規範定立→あてはめの3パーツを、正しく組み立てる練習帳です。</p>
+</div>
+
+<div class="app-wrap">
+  <div class="stats-bar" id="statsBar"></div>
+  <div id="mainArea"></div>
+  <div class="proto-note">法学部・司法試験対策シリーズ｜内容は学習の便宜のため要約している部分があります。実際の答案作成では必ず基本書・判例集・答練の添削等で確認してください。</div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  const SUBJECTS = [
+    {
+      name: "憲法", icon: "憲",
+      problems: [
+        {
+          title: "私人間効力（三菱樹脂事件型）",
+          desc: "企業の採用拒否と思想信条の自由の私人間適用。",
+          facts: "企業Yは、入社試験の際に学生運動歴を秘匿していたことを理由に、採用内定を得ていたXの本採用を拒否した。Xは、これは思想信条の自由（憲法19条）を侵害する違法な取扱いであると主張した。",
+          steps: [
+            { instruction:"この事例で、まず何が問題になるかを正しく指摘しているのはどれか？",
+              choices:[
+                {text:"本件では、憲法19条の規定が、国家ではなく私人であるYとXとの関係に直接適用されるか（私人間効力）が問題となる。", correct:true},
+                {text:"本件では、Yの採用内定通知が民法上の契約の申込みにあたるかが問題となる。", correct:false, hint:"契約の性質決定は本件の中心的争点ではありません。争点は「憲法上の人権規定が私人間の関係にどう及ぶか」です。"},
+                {text:"本件では、Xの学生運動が公共の福祉に反するかが問題となる。", correct:false, hint:"公共の福祉による人権制約は国家対個人の場面で問題となる枠組みで、私人間の紛争である本件には直接あてはまりません。"}
+              ]},
+            { instruction:"問題提起に対応する規範として、最も適切なものはどれか？",
+              choices:[
+                {text:"憲法の人権規定は国又は公共団体と個人との関係を規律するものであり、私人相互の関係を直接規律するものではない。私人間における人権侵害的行為は、民法90条等の私法の一般条項の解釈を通じて間接的に規律されると解する（間接適用説）。", correct:true},
+                {text:"憲法の人権規定は私人間にも直接適用されると解する。", correct:false, hint:"これは直接適用説であり、判例（三菱樹脂事件、最大判昭和48年12月12日）が採用した立場（間接適用説）と異なります。"},
+                {text:"私人間の関係には憲法は一切関係しないと解する。", correct:false, hint:"これは無適用説に近い立場で、民法の一般条項を介して間接的に憲法の趣旨が及ぶという判例の理解とは異なります。"}
+              ]},
+            { instruction:"規範を本件の事実にあてはめる記述として、最も適切なものはどれか？",
+              choices:[
+                {text:"本問では、企業者は契約締結の自由の一環として広範な採用の自由を有し、労働者の思想・信条を理由として本採用を拒否したとしても、これが公序良俗（民法90条）に反する等の特段の事情がない限り、直ちに違法とはいえない。", correct:true},
+                {text:"本問では、Yの行為は憲法19条に直接違反し無効である。", correct:false, hint:"間接適用説の規範を立てた以上、憲法違反を直接論じるのではなく、民法90条等の一般条項を介して判断する必要があります。規範とあてはめが対応していません。"},
+                {text:"本問では、企業には採用の自由が一切認められないから、Yの行為は違法である。", correct:false, hint:"判例は企業の採用の自由を広く認めており、「採用の自由が一切ない」という前提は誤りです。"}
+              ]}
+          ]
+        },
+        {
+          title: "職業選択の自由（薬事法型）",
+          desc: "薬局の距離制限規制と規制目的二分論。",
+          facts: "県は、薬局の乱立による過当競争が不良医薬品の供給につながることを防止する目的で、薬局開設に距離制限を課す条例を定めた。この条例により開設を不許可とされた事業者Xは、条例が憲法22条1項に違反すると主張した。",
+          steps: [
+            { instruction:"この事例で、まず何が問題になるかを正しく指摘しているのはどれか？",
+              choices:[
+                {text:"本件では、薬局開設の距離制限規制が、職業選択の自由（憲法22条1項）に対する必要かつ合理的な規制といえるかが問題となる。", correct:true},
+                {text:"本件では、Xの財産権（憲法29条）が侵害されたかが問題となる。", correct:false, hint:"本件で問題となっている自由は「薬局を開設して営業する自由」であり、これは職業選択の自由（22条1項）の問題です。既存の財産の収用等の場面ではありません。"},
+                {text:"本件では、条例が法律の委任なく制定されたかが問題となる。", correct:false, hint:"事例には条例制定手続の瑕疵は示されていません。争点は規制の実体的な合憲性です。"}
+              ]},
+            { instruction:"問題提起に対応する規範として、最も適切なものはどれか？",
+              choices:[
+                {text:"職業の許可制は職業選択の自由に対する強力な制限であり、重要な公共の利益のために必要かつ合理的な措置であることを要する。国民の生命・健康に対する危険防止を目的とする消極目的規制については、規制の必要性・合理性、より緩やかな規制手段の有無を審査すると解する。", correct:true},
+                {text:"経済的自由に対する規制は、常に立法府の広い裁量に委ねられ、明白に不合理でない限り合憲であると解する。", correct:false, hint:"これは積極目的規制（社会経済政策目的）に妥当しやすい緩やかな基準であり、本件のような消極目的規制（生命・健康の危険防止目的）にはより厳格な審査（規範）が必要です。"},
+                {text:"職業選択の自由は絶対無制約の権利であり、いかなる規制も許されないと解する。", correct:false, hint:"22条1項も「公共の福祉に反しない限り」という留保のある権利であり、絶対無制約とする規範は誤りです。"}
+              ]},
+            { instruction:"規範を本件の事実にあてはめる記述として、最も適切なものはどれか？",
+              choices:[
+                {text:"本問では、薬局の偏在によって不良医薬品の供給の危険が生じるという因果関係は確実な根拠に基づく合理的な判断とは認め難く、距離制限以外のより緩やかな規制（行政上の監督強化等）によっても目的を達成できることから、規制の必要性・合理性を欠く。したがって、本件条例は憲法22条1項に違反し無効である。", correct:true},
+                {text:"本問では、薬局開設を規制する目的があるのだから、規制手段の当否を問わず合憲である。", correct:false, hint:"規範で立てた「必要性・合理性」「より緩やかな規制手段の有無」の検討を経ずに、目的の存在だけで結論を出しています。あてはめが規範に対応していません。"},
+                {text:"本問では、Xが不許可処分を受けたという結果のみをもって、当然に違憲となる。", correct:false, hint:"不利益処分を受けたという結果だけでは違憲性は基礎づけられません。規制の目的・必要性・手段の相当性を検討する必要があります。"}
+              ]}
+          ]
+        },
+        {
+          title: "政教分離（津地鎮祭事件型）",
+          desc: "地方公共団体主催の神式行事と政教分離原則。",
+          facts: "市は、市営体育館の起工式にあたり、神社神道の方式による地鎮祭を挙行し、その費用を公金から支出した。住民Xは、この地鎮祭が憲法20条3項の禁止する「宗教的活動」にあたり、公金支出も89条に違反すると主張した。",
+          steps: [
+            { instruction:"この事例で、まず何が問題になるかを正しく指摘しているのはどれか？",
+              choices:[
+                {text:"本件では、市が挙行した神式の地鎮祭が、憲法20条3項が禁止する「宗教的活動」にあたるかが問題となる。", correct:true},
+                {text:"本件では、市長個人の信教の自由（憲法20条1項）が侵害されたかが問題となる。", correct:false, hint:"本件は市（地方公共団体）の行為の合憲性が問われる場面であり、市長個人の信教の自由が侵害されたという事案ではありません。"},
+                {text:"本件では、神社神道が憲法上の宗教団体に該当するかが問題となる。", correct:false, hint:"神社神道が宗教であること自体は特段争いになっていません。争点は「地鎮祭という行為」が禁止される宗教的活動にあたるかです。"}
+              ]},
+            { instruction:"問題提起に対応する規範として、最も適切なものはどれか？",
+              choices:[
+                {text:"政教分離原則は国家と宗教との関わり合いを一切許さないものではなく、その関わり合いが相当とされる限度を超える場合に禁止されると解する。憲法20条3項の「宗教的活動」とは、当該行為の目的が宗教的意義をもち、その効果が宗教に対する援助、助長、促進又は圧迫、干渉等になるような行為をいうと解する（目的効果基準）。", correct:true},
+                {text:"国家と宗教は完全に分離されるべきであり、国家がいかなる宗教的行為にも一切関与してはならないと解する。", correct:false, hint:"判例（津地鎮祭事件、最大判昭和52年7月13日）は政教分離を厳格に解さず、社会的・文化的条件に照らし相当とされる限度を超えるかで判断するという、緩やかな理解を採用しています。"},
+                {text:"宗教的な儀式が行われた事実さえあれば、当然に憲法20条3項に違反すると解する。", correct:false, hint:"目的効果基準は、外形的な儀式の有無だけでなく、行為の目的と効果を諸般の事情から総合的に判断する枠組みです。外形のみで判断する規範は不正確です。"}
+              ]},
+            { instruction:"規範を本件の事実にあてはめる記述として、最も適切なものはどれか？",
+              choices:[
+                {text:"本問では、地鎮祭は建築着工に際して行われる我が国の慣習化した儀礼にすぎず、その目的は専ら世俗的なものであり、効果も神道を援助、助長、促進し又は他の宗教に圧迫、干渉を加えるものとは認められない。したがって、宗教的活動にはあたらず、公金支出も89条に違反しない。", correct:true},
+                {text:"本問では、神官が神式の作法で儀式を行った以上、外形的に宗教的活動にあたることは明らかである。", correct:false, hint:"目的効果基準は外形的側面のみで判断しないとする規範を立てています。目的・効果を総合的に考慮せず、外形のみで結論を出すのはあてはめとして不十分です。"},
+                {text:"本問では、公金が支出された事実がある以上、当然に89条に違反する。", correct:false, hint:"89条違反の有無も、目的効果基準に照らした実質判断が必要です。公金支出の事実のみで機械的に違反を導くのは規範に沿ったあてはめではありません。"}
+              ]}
+          ]
+        },
+        {
+          title: "法の下の平等（非嫡出子相続分型）",
+          desc: "嫡出子と非嫡出子の相続分の差異と平等原則。",
+          facts: "民法900条4号ただし書（当時）は、嫡出でない子の相続分を嫡出子の2分の1と定めていた。非嫡出子であるXは、この規定が憲法14条1項に違反すると主張した。",
+          steps: [
+            { instruction:"この事例で、まず何が問題になるかを正しく指摘しているのはどれか？",
+              choices:[
+                {text:"本件では、嫡出子と非嫡出子の相続分に差異を設ける規定が、法の下の平等（憲法14条1項）に違反しないかが問題となる。", correct:true},
+                {text:"本件では、Xに相続権自体が認められるかが問題となる。", correct:false, hint:"非嫡出子にも相続権自体は認められており（900条4号本文）、争われているのはその「相続分の割合」に差を設けることの合憲性です。"},
+                {text:"本件では、遺言による相続分の指定が有効かが問題となる。", correct:false, hint:"事例に遺言の存在は示されていません。争点は法定相続分を定める規定自体の合憲性です。"}
+              ]},
+            { instruction:"問題提起に対応する規範として、最も適切なものはどれか？",
+              choices:[
+                {text:"憲法14条1項の平等は、事柄の性質に即応じた合理的な根拠に基づくものでない限り、差別的取扱いを禁止する趣旨と解する。子は自ら選択ないし修正する余地のない事柄（父母が婚姻していたか）を理由に不利益を受けるべきではなく、このような理由に基づく差別的取扱いは、家族形態の多様化等の社会状況に照らし、合理的根拠を欠くと解する。", correct:true},
+                {text:"憲法14条1項は絶対的・機械的平等を要求し、いかなる区別も一切許されないと解する。", correct:false, hint:"判例・通説は、合理的な理由に基づく区別（例えば年齢による区別等）は許容される「相対的平等」を採用しています。絶対的平等という規範は不正確です。"},
+                {text:"相続分の定めは私法上の制度であり、憲法14条1項は一切及ばないと解する。", correct:false, hint:"私法上の制度であっても、国が定める法律の内容として憲法上の平等原則の適用対象となります。「一切及ばない」という規範は誤りです。"}
+              ]},
+            { instruction:"規範を本件の事実にあてはめる記述として、最も適切なものはどれか？",
+              choices:[
+                {text:"本問では、Xは父母が婚姻していたかという自ら選択・修正できない事情のみを理由に相続分について不利益な扱いを受けており、家族形態の多様化や国民意識の変化に照らし、遅くとも相続開始時においてこのような差別的取扱いを正当化する合理的根拠は失われていた。したがって、本規定は憲法14条1項に違反する。", correct:true},
+                {text:"本問では、嫡出子と非嫡出子とで生物学上の親子関係に違いはないから、常に区別は許されない。", correct:false, hint:"「常に区別が許されない」という一般化は、規範が示す「合理的根拠の有無」という個別具体的な検討を経ていません。あてはめとしては規範との対応が不十分です。"},
+                {text:"本問では、法律婚の尊重という立法目的がある以上、当然に合憲である。", correct:false, hint:"法律婚の尊重という目的の存在だけで結論づけており、規範が求める「合理的根拠の有無」という実質的検討（社会状況の変化等）を経ていません。"}
+              ]}
+          ]
+        },
+        {
+          title: "生存権の法的性格（朝日訴訟型）",
+          desc: "生活保護基準の設定と生存権の司法審査。",
+          facts: "厚生大臣（当時）が定めた生活保護基準について、その水準が「健康で文化的な最低限度の生活」（憲法25条1項）を維持するに足りないとして、生活保護受給者Xがその違法性を争った。",
+          steps: [
+            { instruction:"この事例で、まず何が問題になるかを正しく指摘しているのはどれか？",
+              choices:[
+                {text:"本件では、生活保護基準の設定に関する行政の裁量判断が、裁判所の司法審査の対象となるか、なるとしてどのような基準で審査されるかが問題となる。", correct:true},
+                {text:"本件では、Xに生活保護を受給する権利が一切認められるかが問題となる。", correct:false, hint:"Xは既に生活保護を受給しており、争われているのは受給の有無ではなく「基準の水準」の妥当性です。"},
+                {text:"本件では、生活保護法が国会の議決を経て制定されたかが問題となる。", correct:false, hint:"立法手続の瑕疵は事例に示されていません。争点は基準設定という行政裁量の当否です。"}
+              ]},
+            { instruction:"問題提起に対応する規範として、最も適切なものはどれか？",
+              choices:[
+                {text:"「健康で文化的な最低限度の生活」（25条1項）が具体的にどのような内容を持つかの認定判断は、厚生大臣の合目的的な裁量に委されており、その判断は、当不当の問題として政府の政治責任が問われることはあっても、直ちに違法の問題を生ずることはない。ただし、判断が裁量権の範囲を逸脱し又は濫用した場合には司法審査の対象となると解する。", correct:true},
+                {text:"25条1項は国民に対し、具体的な生活保護の内容を直接請求できる具体的権利を保障していると解する。", correct:false, hint:"判例（朝日訴訟、最大判昭和42年5月24日）はプログラム規定的な理解に立ち、具体的権利性を正面から認めたわけではありません。厚生大臣の裁量判断を前提とする枠組みです。"},
+                {text:"生活保護基準の設定には一切の行政裁量が認められないと解する。", correct:false, hint:"判例は厚生大臣に合目的的な裁量があることを前提としています。「裁量が一切ない」という規範はこれと矛盾します。"}
+              ]},
+            { instruction:"規範を本件の事実にあてはめる記述として、最も適切なものはどれか？",
+              choices:[
+                {text:"本問では、基準の具体的な当否を検討するには、現実の生活条件を無視して著しく低い基準を設定する等憲法及び生活保護法の趣旨・目的に反し裁量権の限界を超えた場合又は裁量権を濫用した場合に該当する事情が必要であるが、そのような事情が認められない限り、当該基準設定の適法性は否定されない。", correct:true},
+                {text:"本問では、Xが基準に不満を持っている以上、当然に基準は違法である。", correct:false, hint:"受給者の主観的な不満の有無だけでは、規範が求める「裁量権の逸脱濫用」の判断はできません。具体的な生活条件との関係等、客観的な検討が必要です。"},
+                {text:"本問では、25条1項は具体的権利を保障していないから、Xの請求はおよそ認められない。", correct:false, hint:"規範は「裁量権の逸脱濫用があれば司法審査の対象となる」としており、常に請求が認められないという結論はこの規範のあてはめとして整合しません。"}
+              ]}
+          ]
+        }
+      ]
+    },
+    {
+      name: "民法", icon: "民",
+      problems: [
+        {
+          title: "背信的悪意者と177条",
+          desc: "二重譲渡の事案で、Cが177条の第三者にあたらないことを構成する。",
+          facts: "Aは自己所有の甲土地をBに売却したが、登記は未了のままであった。Cは、Bが甲土地の所有権を取得しながら未登記であることを知り、Bに高値で売りつける目的でAから甲土地を二重に買い受け、先に登記を経由した。Bは、Cに対して甲土地の所有権を主張したい。",
+          steps: [
+            { instruction:"この事例で、まず何が問題になるかを正しく指摘しているのはどれか？",
+              choices:[
+                {text:"本件では、Cが民法177条にいう「第三者」に該当するかが問題となる。", correct:true},
+                {text:"本件では、AC間の売買契約が公序良俗に違反し無効とならないかが問題となる。", correct:false, hint:"問題はBとCのどちらが優先するかという対抗関係の場面であり、AC間の契約自体の有効性は争点ではありません。"},
+                {text:"本件では、Bが即時取得（192条）により甲土地の所有権を取得できるかが問題となる。", correct:false, hint:"即時取得は動産についての制度であり、不動産である土地には適用されません。"}
+              ]},
+            { instruction:"問題提起に対応する規範として、最も適切なものはどれか？",
+              choices:[
+                {text:"177条の「第三者」とは、当事者及びその包括承継人以外の者で、登記の欠缺を主張する正当な利益を有する者をいうと解する。もっとも、自由競争として許容される範囲を逸脱し、登記の欠缺を主張することが信義則に反すると評価される背信的悪意者は、これに含まれないと解する。", correct:true},
+                {text:"177条の「第三者」とは、善意の第三者に限られると解する。", correct:false, hint:"単なる悪意者は177条の第三者に含まれるのが判例の立場です。「善意者に限る」は誤った規範です。"},
+                {text:"対抗要件とは登記のことをいうと解する。", correct:false, hint:"これは規範になっていません。条文の言い換えにすぎず、第三者の範囲という争点に答えていません。"}
+              ]},
+            { instruction:"規範を本件の事実にあてはめる記述として、最も適切なものはどれか？",
+              choices:[
+                {text:"本問では、Cは、Bが甲土地の所有権を取得しながら未登記であることを認識しつつ、高値で売りつける目的でAから二重に買い受けており、自由競争として許容される範囲を逸脱し信義則に反するといえる。したがって、Cは背信的悪意者にあたり、177条の第三者に該当しない。", correct:true},
+                {text:"本問では、Cは甲土地の存在を知らなかったのだから、単純悪意者にすぎず第三者に該当する。", correct:false, hint:"事実と矛盾しています。本問のCは、Bが未登記であることを認識したうえで行動しています。"},
+                {text:"本問では、Cは正当な対価を支払って甲土地を購入しているから、第三者に該当する。", correct:false, hint:"背信性の判断は対価の相当性だけで決まるものではなく、目的（高値転売目的）や認識の内容も総合的に考慮する必要があります。"}
+              ]}
+          ]
+        },
+        {
+          title: "即時取得と占有改定",
+          desc: "占有改定による占有取得で即時取得が成立するかを構成する。",
+          facts: "Aは自己所有の動産甲をBに賃貸していたが、Bは無権利であるにもかかわらず甲をCに売却し、現実の引渡しはせずに占有改定の方法で引き渡した。Cは甲の所有権を即時取得したと主張したい。",
+          steps: [
+            { instruction:"この事例で、まず何が問題になるかを正しく指摘しているのはどれか？",
+              choices:[
+                {text:"本件では、占有改定による占有取得によっても、即時取得（192条）の要件である「占有を始めた」といえるかが問題となる。", correct:true},
+                {text:"本件では、甲が「財物」にあたるかが問題となる。", correct:false, hint:"192条の即時取得の要件は「動産」であることであり、財物性という刑法上の概念ではありません。ここでは争点になりません。"},
+                {text:"本件では、AB間の賃貸借契約が有効に成立していたかが問題となる。", correct:false, hint:"AB間の賃貸借契約の成立自体は特に争いになっていません。問題はBC間の無権利処分について即時取得が成立するかです。"}
+              ]},
+            { instruction:"問題提起に対応する規範として、最も適切なものはどれか？",
+              choices:[
+                {text:"即時取得の成立には、取引行為による占有取得、平穏・公然、占有取得時における善意・無過失が要件となる。判例は、占有改定による占有取得では、外観上の占有状態に変化がなく、真の権利者の帰責性を基礎づける事情に乏しいことから、即時取得の要件を満たさないと解する。", correct:true},
+                {text:"占有改定による占有取得であっても、常に即時取得の要件を満たすと解する。", correct:false, hint:"判例は、占有改定では即時取得は成立しないとする立場です。この規範は判例の立場と正反対です。"},
+                {text:"即時取得の要件は、取引行為の存在のみで足り、占有取得の態様は問わないと解する。", correct:false, hint:"占有取得の態様（現実の引渡しか占有改定か）は、まさに本件の争点であり、これを問わないとする規範は争点への回答になっていません。"}
+              ]},
+            { instruction:"規範を本件の事実にあてはめる記述として、最も適切なものはどれか？",
+              choices:[
+                {text:"本問では、CはBから占有改定の方法によってのみ甲の引渡しを受けており、外観上の占有状態には何ら変化が生じていない。したがって、即時取得の要件である占有取得を満たさず、Cは甲の所有権を即時取得できない。", correct:true},
+                {text:"本問では、CB間に取引行為が存在する以上、占有取得の態様を問わず即時取得は成立する。", correct:false, hint:"規範は「占有改定では要件を満たさない」としているのに、取引行為の存在のみで結論を出しており、規範とあてはめが対応していません。"},
+                {text:"本問では、Cが善意無過失であれば、占有改定であっても即時取得が成立する。", correct:false, hint:"善意・無過失は要件の一部にすぎず、占有取得の態様（占有改定では不十分という規範）を無視して結論を出しています。"}
+              ]}
+          ]
+        },
+        {
+          title: "94条2項類推適用",
+          desc: "不実の登記名義を放置した所有者の帰責性を構成する。",
+          facts: "Aは自己所有の甲不動産について、実際には譲渡する意思がないにもかかわらず、事情があって知人Bの名義で所有権移転登記をすることを承諾した。その後Bは、この登記名義を利用して甲をCに売却した。Cは登記を信頼して購入しており、Aが甲の所有権を主張できるかが問題となった。",
+          steps: [
+            { instruction:"この事例で、まず何が問題になるかを正しく指摘しているのはどれか？",
+              choices:[
+                {text:"本件では、AB間に通謀虚偽表示（94条1項）そのものはなくても、94条2項を類推適用してCを保護できないかが問題となる。", correct:true},
+                {text:"本件では、Cが即時取得（192条）により甲の所有権を取得できるかが問題となる。", correct:false, hint:"即時取得は動産に関する制度であり、不動産である甲には適用されません。"},
+                {text:"本件では、Bに横領罪が成立するかが問題となる。", correct:false, hint:"本件は民事上の権利関係（甲の所有権の帰属）が問題となる場面であり、刑事責任の成否は争点ではありません。"}
+              ]},
+            { instruction:"問題提起に対応する規範として、最も適切なものはどれか？",
+              choices:[
+                {text:"94条2項は、虚偽の外観作出につき本人に帰責性がある場合に、その外観を信頼した善意の第三者を保護する権利外観法理を表したものと解する。AB間に通謀（虚偽表示そのもの）がなくても、本人が不実の登記の存在を認識し承諾する等、本人に自ら虚偽の外観作出に積極的に関与した又はこれと同視できる帰責性が認められる場合には、94条2項を類推適用し、善意の第三者を保護すべきと解する。", correct:true},
+                {text:"94条2項は、当事者間に通謀虚偽表示が存在する場合にのみ適用され、類推適用の余地は一切ないと解する。", correct:false, hint:"判例は、通謀がない場合にも本人の帰責性を要件として94条2項の類推適用を認めています。「類推適用の余地はない」という規範は判例の展開と矛盾します。"},
+                {text:"不実の登記が存在する以上、本人の関与の有無を問わず、常に善意の第三者が保護されると解する。", correct:false, hint:"94条2項類推適用の要件として「本人の帰責性」が不可欠です。本人の関与の有無を問わないとする規範は要件を欠いています。"}
+              ]},
+            { instruction:"規範を本件の事実にあてはめる記述として、最も適切なものはどれか？",
+              choices:[
+                {text:"本問では、Aは自らBへの所有権移転登記に承諾を与えており、不実の登記の存在を認識しつつ自らこれに積極的に関与したといえる。したがって、Aには94条2項類推適用を基礎づける帰責性が認められ、Cが善意である限り、AはCに対し甲の所有権を主張できない。", correct:true},
+                {text:"本問では、AB間に譲渡の意思がなかった以上、Aは常に保護され、Cは所有権を取得できない。", correct:false, hint:"譲渡意思の不存在という事実だけでなく、規範が求める「本人の帰責性」（登記への承諾という積極的関与）を踏まえた検討が必要です。"},
+                {text:"本問では、Cが登記を信頼しさえすれば、Aの関与の有無にかかわらず常に保護される。", correct:false, hint:"94条2項類推適用の要件として本人の帰責性が不可欠であり、これを検討せずにCの信頼のみで結論を出すのは規範に沿ったあてはめではありません。"}
+              ]}
+          ]
+        },
+        {
+          title: "詐害行為取消権",
+          desc: "債務者の財産処分行為を債権者が取り消せるかを構成する。",
+          facts: "多額の債務を負い無資力状態にあったAは、唯一の財産である甲不動産を、事情を知らない知人Bに相場より著しく低い価格で売却した。Aの債権者Xは、この売却行為を取り消して甲を責任財産に回復させたいと考えている。",
+          steps: [
+            { instruction:"この事例で、まず何が問題になるかを正しく指摘しているのはどれか？",
+              choices:[
+                {text:"本件では、Xが詐害行為取消権（民法424条）に基づき、AB間の売買契約を取り消すことができるかが問題となる。", correct:true},
+                {text:"本件では、AB間の売買契約が公序良俗違反（90条）により無効かが問題となる。", correct:false, hint:"90条による無効の主張とは別に、民法は債権者を保護するための固有の制度（詐害行為取消権）を用意しており、本件はその適用場面です。"},
+                {text:"本件では、Bが甲の所有権を時効取得できるかが問題となる。", correct:false, hint:"時効取得の問題ではなく、既に成立した売買契約の効力を債権者が争えるかという場面です。"}
+              ]},
+            { instruction:"問題提起に対応する規範として、最も適切なものはどれか？",
+              choices:[
+                {text:"詐害行為取消権の要件は、①債務者が債権者を害することを知って行った行為（詐害行為）であること、②債務者がその行為時において債権者を害することを知っていたこと（詐害意思）、③受益者が行為時においてその行為が債権者を害することを知っていたことである（424条1項）。", correct:true},
+                {text:"詐害行為取消権は、債務者の財産処分行為であれば理由を問わず常に取り消すことができる制度であると解する。", correct:false, hint:"424条は、詐害性・詐害意思・受益者の悪意という具体的要件を定めています。「理由を問わず常に取消し可能」という規範は要件を無視しています。"},
+                {text:"詐害行為取消権の行使には、債権者の債権が担保権によって保全されていることが必要であると解する。", correct:false, hint:"そのような要件は424条にはありません。誤った規範です。"}
+              ]},
+            { instruction:"規範を本件の事実にあてはめる記述として、最も適切なものはどれか？",
+              choices:[
+                {text:"本問では、Aは無資力状態にありながら唯一の財産である甲を著しく低い価格で売却しており、これにより責任財産が減少し債権者を害する行為（詐害行為）にあたる。Aは自己の資力状況を認識していたと考えられ詐害意思も認められる。もっとも、受益者Bが事情を知らなかった（善意であった）場合には、Xは取消権を行使できない。", correct:true},
+                {text:"本問ではAB間の売買契約が成立している以上、Xは一切これに介入できない。", correct:false, hint:"詐害行為取消権はまさに債務者の有効な処分行為の効力を債権者との関係で否定する制度であり、「契約が成立している以上介入できない」という理解は制度の存在自体を否定してしまいます。"},
+                {text:"本問では、Aが無資力である以上、Bの認識の有無を問わず取消しが認められる。", correct:false, hint:"424条1項ただし書により、受益者が善意であるときは詐害行為取消権を行使できません。Bの認識（悪意）の有無は規範上重要な要件です。"}
+              ]}
+          ]
+        },
+        {
+          title: "解除と登記",
+          desc: "契約解除後に登場した第三者と登記の要否を構成する。",
+          facts: "AはBに甲土地を売却し登記も移転したが、Bが代金を支払わなかったため、Aはこの売買契約を解除した。ところが、Aが解除の意思表示をした後に、BがCに甲土地を転売していた。Aは、Cに対して甲土地の所有権を主張したい。",
+          steps: [
+            { instruction:"この事例で、まず何が問題になるかを正しく指摘しているのはどれか？",
+              choices:[
+                {text:"本件では、契約解除後に現れた第三者Cとの関係が、545条1項ただし書ではなく177条の対抗問題として処理されるべきではないかが問題となる。", correct:true},
+                {text:"本件では、Aの解除の意思表示が有効に到達したかが問題となる。", correct:false, hint:"解除の意思表示自体の有効性は事例上争いになっていません。争点は解除後に現れた第三者との関係です。"},
+                {text:"本件では、Bに詐欺（96条）が成立するかが問題となる。", correct:false, hint:"事例に欺罔行為を示す事情はなく、詐欺取消しの場面ではありません。争点は解除に伴う第三者保護の枠組みです。"}
+              ]},
+            { instruction:"問題提起に対応する規範として、最も適切なものはどれか？",
+              choices:[
+                {text:"545条1項ただし書は解除前に利害関係に入った第三者を保護する規定であるのに対し、解除後に現れた第三者との関係は、解除により原状回復により復帰した原所有者の権利と、その後の第二の譲渡とが競合する二重譲渡類似の関係にあるとして、177条の対抗問題として処理されると解する。", correct:true},
+                {text:"545条1項ただし書は、解除の前後を問わず、すべての第三者を無条件に保護する規定であると解する。", correct:false, hint:"判例（最判昭和35年11月29日）は解除後の第三者については177条で処理するとしており、545条1項ただし書のみで処理されるわけではありません。"},
+                {text:"解除がなされた場合、契約は遡って無効となるため、その後のいかなる第三者との関係でも常にAが優先すると解する。", correct:false, hint:"解除の遡及効を貫くと第三者の取引安全を害するため、判例は解除後の第三者との関係を177条の対抗問題として処理し、登記の先後で優劣を決めます。"}
+              ]},
+            { instruction:"規範を本件の事実にあてはめる記述として、最も適切なものはどれか？",
+              choices:[
+                {text:"本問では、Cは解除の意思表示がなされた後にBから甲土地を譲り受けており、AとCの関係は、解除により復帰したAの権利と、その後のBC間の譲渡とが競合する対抗関係にあるといえる。したがって、AとCのいずれか先に登記を備えた方が優先する。", correct:true},
+                {text:"本問では、Cは解除後に登場した第三者だから、545条1項ただし書により保護され、登記なくして所有権を取得する。", correct:false, hint:"545条1項ただし書が適用されるのは解除前の第三者です。規範が示す「解除後は177条」という整理と矛盾する結論になっています。"},
+                {text:"本問では、Aは解除により当然に甲土地の所有権を回復するから、登記の有無を問わずCに優先する。", correct:false, hint:"規範は「解除後の第三者との関係は177条の対抗問題」としており、登記の先後を問わないとする結論はこれと整合しません。"}
+              ]}
+          ]
+        }
+      ]
+    },
+    {
+      name: "刑法", icon: "刑",
+      problems: [
+        {
+          title: "正当防衛の急迫性",
+          desc: "予期していた侵害への反撃で、急迫性が否定されないことを構成する。",
+          facts: "Aは、以前からBと折り合いが悪く、いつかBに襲われるかもしれないと考えていた。ある日、Bが突然Aに殴りかかってきたため、Aはとっさに反撃してBに軽傷を負わせた。",
+          steps: [
+            { instruction:"この事例で、まず何が問題になるかを正しく指摘しているのはどれか？",
+              choices:[
+                {text:"本件では、Bの侵害をAが予期していたことが、正当防衛の「急迫」性を否定する事情とならないかが問題となる。", correct:true},
+                {text:"本件では、Aに正当防衛の故意があったかが問題となる。", correct:false, hint:"正当防衛の要件に「防衛の故意」という概念はありません。争点の立て方がずれています。"},
+                {text:"本件では、Aの反撃が緊急避難の要件を満たすかが問題となる。", correct:false, hint:"本件は「不正の侵害」に対する反撃であり正当防衛（36条）の場面です。緊急避難（37条）は無関係な第三者の法益を犠牲にする場面です。"}
+              ]},
+            { instruction:"問題提起に対応する規範として、最も適切なものはどれか？",
+              choices:[
+                {text:"急迫性とは、法益侵害が現に存在するか間近に迫っていることをいうと解する。単に侵害を予期していたというだけでは急迫性は失われないが、その機会を利用し積極的に加害する意思で対応したなど特段の事情がある場合には急迫性が否定されると解する。", correct:true},
+                {text:"急迫性とは、侵害者に故意があることをいうと解する。", correct:false, hint:"急迫性は侵害の時間的切迫を意味する概念であり、侵害者側の故意の有無とは関係ありません。"},
+                {text:"予期していた侵害には急迫性は一切認められないと解する。", correct:false, hint:"判例（最判昭和52年7月21日）の立場では、単なる予期だけでは急迫性は失われません。この規範は判例より厳しすぎます。"}
+              ]},
+            { instruction:"規範を本件の事実にあてはめる記述として、最も適切なものはどれか？",
+              choices:[
+                {text:"本問では、Aは以前からBとの関係悪化を認識し侵害を予期していたにとどまり、積極的に加害する意思をもってBとの対峙に臨んだという事情はうかがわれない。したがって、急迫性を否定する特段の事情は認められず、急迫性は肯定される。", correct:true},
+                {text:"本問では、Aは侵害を予期していたのだから、急迫性は当然に否定される。", correct:false, hint:"規範のあてはめが逆になっています。規範は「予期していただけでは急迫性は失われない」としています。"},
+                {text:"本問では、Aが反撃で軽傷を負わせたにとどまるから、急迫性が認められる。", correct:false, hint:"反撃の結果の軽重は急迫性（侵害の時間的切迫）とは無関係な事情です。別の要件（相当性）とすり替わっています。"}
+              ]}
+          ]
+        },
+        {
+          title: "不法領得の意思（使用窃盗）",
+          desc: "短時間の無断使用で、権利者排除意思が否定されることを構成する。",
+          facts: "Aは同僚Bの机の上にあった資料を、Bに知られないまま少しの間借りて内容を確認し、その日のうちに元の場所に戻した。",
+          steps: [
+            { instruction:"この事例で、まず何が問題になるかを正しく指摘しているのはどれか？",
+              choices:[
+                {text:"本件では、Aの行為に窃盗罪の成立に必要な不法領得の意思、特に権利者排除意思が認められるかが問題となる。", correct:true},
+                {text:"本件では、Aに窃盗罪の故意が認められるかが問題となる。", correct:false, hint:"Aが他人の資料であることを認識していたことは明らかで、故意自体は争いになりません。焦点は不法領得の意思の有無です。"},
+                {text:"本件では、資料が「財物」にあたるかが問題となる。", correct:false, hint:"資料は財産的価値を有する有体物であり、財物性は明らかに肯定されます。ここは争点になりません。"}
+              ]},
+            { instruction:"問題提起に対応する規範として、最も適切なものはどれか？",
+              choices:[
+                {text:"不法領得の意思とは、権利者を排除して他人の物を自己の所有物としてその経済的用法に従い利用処分する意思をいうと解する。ごく短時間の使用にとどまり、後に元の場所に戻す意思がある場合には、権利者排除意思を欠き、いわゆる使用窃盗として不可罰となると解する。", correct:true},
+                {text:"不法領得の意思とは、他人の物であることの認識をいうと解する。", correct:false, hint:"それは故意の定義です。不法領得の意思は故意とは別の、窃盗罪に固有の主観的要件です。"},
+                {text:"一時的な使用であっても、常に権利者排除意思が認められると解する。", correct:false, hint:"これでは使用窃盗という概念自体を否定してしまいます。判例・通説はごく短時間の使用にとどまる場合には否定する余地を認めています。"}
+              ]},
+            { instruction:"規範を本件の事実にあてはめる記述として、最も適切なものはどれか？",
+              choices:[
+                {text:"本問では、Aは資料を少しの間確認しただけで、その日のうちに元の場所に戻しており、権利者を排除して自己の所有物として扱う意思は認められない。したがって、権利者排除意思を欠き、窃盗罪は成立しない（使用窃盗）。", correct:true},
+                {text:"本問では、Aは無断で資料を持ち出しているから、権利者排除意思は当然に認められる。", correct:false, hint:"「無断で持ち出した＝権利者排除意思あり」と短絡しています。使用の期間・態様を規範に従って検討していません。"},
+                {text:"本問では、Aは資料を経済的用法に従って使用しているから、不法領得の意思が認められる。", correct:false, hint:"不法領得の意思は権利者排除意思と経済的用法に従う利用意思の両方が必要です。片方だけを見て結論を出しています。"}
+              ]}
+          ]
+        },
+        {
+          title: "因果関係（危険の現実化）",
+          desc: "暴行後に第三者が介在した場合の因果関係を構成する。",
+          facts: "Aは深夜、Vに激しい暴行を加えて瀕死の状態にし、そのまま公園に放置して立ち去った。その後、身元不明の何者かがVに対しさらに暴行を加えた。Vはその後死亡したが、死因はAの暴行によって形成された傷害であり、後の何者かによる暴行は死期をいくらか早めたにすぎないことが判明した。Aには殺意は認められない前提で、その罪責が問題となった。",
+          steps: [
+            { instruction:"この事例で、まず何が問題になるかを正しく指摘しているのはどれか？",
+              choices:[
+                {text:"本件では、身元不明の第三者による暴行が介在したことにより、Aの暴行とVの死亡結果との間の因果関係が否定されないかが問題となる。", correct:true},
+                {text:"本件では、Aに殺人罪の故意（殺意）があったかが問題となる。", correct:false, hint:"本件は殺意が認められない前提の事例です。焦点は因果関係の有無に置かれています。"},
+                {text:"本件では、Vの死亡が心神喪失によるものかが問題となる。", correct:false, hint:"心神喪失は行為者側の責任能力の問題であり、被害者Vの死因とは無関係な概念です。"}
+              ]},
+            { instruction:"問題提起に対応する規範として、最も適切なものはどれか？",
+              choices:[
+                {text:"実行行為後に第三者の行為等の介在事情がある場合、条件関係の存在を前提に、当初の実行行為の危険性が結果へと現実化したと評価できるか否かによって因果関係の有無を判断すると解する。", correct:true},
+                {text:"第三者の行為が介在した場合、条件関係の有無にかかわらず常に因果関係が否定されると解する。", correct:false, hint:"判例（大阪南港事件、最決平成2年11月20日）は、介在事情があっても危険性の現実化が認められれば因果関係を肯定しています。この規範は判例と矛盾します。"},
+                {text:"条件関係（あれなければこれなしの関係）さえ認められれば、常に刑法上の因果関係も認められると解する。", correct:false, hint:"条件関係と法的因果関係は別の判断です。介在事情の評価（危険の現実化）を経ずに条件関係のみで因果関係を認めるのは不正確です。"}
+              ]},
+            { instruction:"規範を本件の事実にあてはめる記述として、最も適切なものはどれか？",
+              choices:[
+                {text:"本問では、Vの死因はAの暴行によって形成された傷害であり、後の何者かによる暴行は死期をいくらか早めたにすぎない。Aの実行行為の危険性が結果へと現実化したと評価できるから、第三者の行為の介在にもかかわらずAの暴行とVの死亡との間に因果関係が認められる。", correct:true},
+                {text:"本問では、身元不明の第三者の行為が介在した以上、Aの因果関係は当然に否定される。", correct:false, hint:"規範は「介在事情があっても危険の現実化が認められれば因果関係は肯定される」としています。介在の事実のみで否定するのは規範に沿っていません。"},
+                {text:"本問では、Aには殺意がないから、そもそも因果関係を検討する必要はない。", correct:false, hint:"因果関係は構成要件該当性の問題であり、故意（殺意の有無）とは別に検討すべき要件です。故意がないことは因果関係の検討を不要にする理由になりません。"}
+              ]}
+          ]
+        },
+        {
+          title: "実行の着手・不能犯",
+          desc: "毒物の量が不十分だった殺人未遂で、実行の着手の有無を構成する。",
+          facts: "Aは、Vを殺害する目的で、Vの飲み物に致死量に満たない毒物を混入させた。Aは致死量に達していると誤信していたが、実際には人体に有害な作用を及ぼす程度の分量ではあった。Vはこれを飲んだが、身体に軽微な変調を来したにとどまり死亡しなかった。Aの罪責が問題となった。",
+          steps: [
+            { instruction:"この事例で、まず何が問題になるかを正しく指摘しているのはどれか？",
+              choices:[
+                {text:"本件では、Aの行為が殺人罪の実行の着手にあたるか、それとも結果発生の危険性を欠く不能犯にとどまるかが問題となる。", correct:true},
+                {text:"本件では、Aに殺人の故意があったかが問題となる。", correct:false, hint:"Aは致死量に達していると誤信しつつ殺害目的で毒物を混入させており、殺人の故意自体は明らかに認められます。焦点は実行の着手・危険性の有無です。"},
+                {text:"本件では、Vの承諾があったかが問題となる。", correct:false, hint:"事例にVの承諾を示す事情はありません。争点ではありません。"}
+              ]},
+            { instruction:"問題提起に対応する規範として、最も適切なものはどれか？",
+              choices:[
+                {text:"実行の着手は、構成要件該当行為に密接な行為であり、既に法益侵害の現実的危険性を含む行為がなされたときに認められると解する。不能犯にあたるかは、行為当時に一般人が認識し得た事情及び行為者が特に認識していた事情を基礎として、結果発生の危険性が全く欠けていたかを客観的に判断すると解する。", correct:true},
+                {text:"行為者が結果発生を意図していた以上、常に実行の着手が認められ、不能犯となる余地はないと解する。", correct:false, hint:"実行の着手・不能犯の判断は行為者の意図だけでなく、客観的な危険性の有無で判断されます。意図のみで一律に決するのは規範として不正確です。"},
+                {text:"結果が発生しなかった以上、常に不能犯として不処罰になると解する。", correct:false, hint:"未遂犯はまさに結果が発生しなかった場合に問題となる類型であり、結果不発生のみで不能犯（不可罰）とするのは未遂犯処罰の制度を無視しています。"}
+              ]},
+            { instruction:"規範を本件の事実にあてはめる記述として、最も適切なものはどれか？",
+              choices:[
+                {text:"本問では、Aが混入させた毒物は致死量には至らないものの、人体に有害な作用を及ぼす程度の分量であり、一般人が認識し得た事情を基礎とすれば、生命侵害の結果発生の危険性が全く欠けていたとはいえない。したがって、実行の着手が認められ、Aには殺人未遂罪が成立する。", correct:true},
+                {text:"本問では、致死量に達していなかった以上、結果発生の危険性は皆無であり、不能犯として不処罰である。", correct:false, hint:"「人体に有害な作用を及ぼす程度」という事実を踏まえていません。致死量に至らないことと危険性が皆無であることとは異なります。"},
+                {text:"本問では、Aが致死量に達していると誤信していた以上、その誤信のみに基づいて実行の着手を認めるべきである。", correct:false, hint:"規範は行為者の主観（誤信）だけでなく、一般人が認識し得た事情も踏まえた客観的な危険性判断を求めています。誤信のみで判断するのは規範とずれています。"}
+              ]}
+          ]
+        },
+        {
+          title: "共謀共同正犯（見張り役型）",
+          desc: "窃盗の実行はBのみ、Aは見張り役にとどまった場合の正犯性を構成する。",
+          facts: "AとBは共謀のうえ、深夜のコンビニエンスストアに侵入して商品を盗むことを計画した。実行日、Bが実際に店内に侵入して商品を盗む間、Aは店外で見張りをし、店員や通行人が来たらBに合図する役割を担った。当日、Bは商品を盗み出したが、実際には店員が来ることはなく、Aは見張りを続けたのみで、具体的な合図をする機会はなかった。Aの罪責が問題となった。",
+          steps: [
+            { instruction:"この事例で、まず何が問題になるかを正しく指摘しているのはどれか？",
+              choices:[
+                {text:"本件では、実行行為を直接分担しなかったAに、窃盗罪の共同正犯（60条）が成立するかが問題となる。", correct:true},
+                {text:"本件では、AB間に共謀（意思の連絡）が存在したかが問題となる。", correct:false, hint:"事例上、事前の具体的な計画合意があったことは明らかであり、共謀の有無自体は主たる争点ではありません。焦点は見張り役にとどまるAの正犯性です。"},
+                {text:"本件では、Bに不法領得の意思が認められるかが問題となる。", correct:false, hint:"Bが商品を通常の用法で領得する意図であったことは明らかで、この点は争点になりません。"}
+              ]},
+            { instruction:"問題提起に対応する規範として、最も適切なものはどれか？",
+              choices:[
+                {text:"判例上、共謀共同正犯の理論により、実行行為を直接分担しない者であっても、事前の共謀に基づき犯行の成功に重要な役割を果たした場合には、共同正犯（60条）としての罪責を負うと解する。", correct:true},
+                {text:"実行行為を直接分担していない者は、いかなる場合も正犯とはなり得ず、幇助犯にとどまると解する。", correct:false, hint:"これは共謀共同正犯の理論を否定する規範であり、判例の立場と矛盾します。"},
+                {text:"共謀共同正犯が成立するには、共謀者全員が現場に立ち会っている必要があると解する。", correct:false, hint:"そのような要件は共謀共同正犯の理論にはありません。現場にいなくても重要な役割の分担があれば共同正犯となりえます。"}
+              ]},
+            { instruction:"規範を本件の事実にあてはめる記述として、最も適切なものはどれか？",
+              choices:[
+                {text:"本問では、Aは事前の共謀に基づき、犯行の発覚を防ぐという犯行の成功に不可欠な見張りの役割を担っており、実際に合図をする機会がなかったとしても、見張りとして待機し続けたこと自体がBの犯行を心理的に容易にする重要な寄与といえる。したがって、Aには窃盗罪の共同正犯が成立する。", correct:true},
+                {text:"本問では、Aは結局具体的な行動を何もとらなかったのだから、犯罪の結果に寄与しておらず共同正犯は成立しない。", correct:false, hint:"見張り役の本質は「異常事態に対応する態勢を取ること」自体にあります。実際に対応する事態が生じなかったことは、この寄与を否定する事情にはなりません。"},
+                {text:"本問では、Aは実行行為（窃取）を直接行っていないから、常に幇助犯にとどまる。", correct:false, hint:"規範は「重要な役割を果たせば共謀共同正犯として正犯となりうる」としています。実行行為の不分担のみで幇助犯と決めつけるのは規範に沿っていません。"}
+              ]}
+          ]
+        }
+      ]
+    },
+    {
+      name: "商法・会社法", icon: "商",
+      problems: [
+        {
+          title: "法人格否認の法理",
+          desc: "形骸化した会社の債権者が、背後の個人に直接責任を追及できることを構成する。",
+          facts: "個人事業主同然のBは、責任回避のため株式会社Y社を設立して事業を行っていたが、Y社は資本金以外に実体的な財産や独自の意思決定機関を有さず、Bがすべてを自己の判断で動かしていた。Y社の債権者Xは、Y社に資力がないため、Bに対して直接債務の履行を求めたい。",
+          steps: [
+            { instruction:"この事例で、まず何が問題になるかを正しく指摘しているのはどれか？",
+              choices:[
+                {text:"本件では、法人格否認の法理により、Y社の法人格を否認してBに対し直接責任を追及できないかが問題となる。", correct:true},
+                {text:"本件では、Y社の設立無効事由があるかが問題となる。", correct:false, hint:"設立手続自体の瑕疵は事例に示されていません。問題となっているのは設立後の会社の実体（形骸化）です。"},
+                {text:"本件では、Bが取締役としての第三者責任（429条）を負うかが問題となる。", correct:false, hint:"429条は取締役の任務懈怠が前提となる別の法律構成です。本件の「会社と個人の実質的同一性」を直接扱う枠組みではありません。"}
+              ]},
+            { instruction:"問題提起に対応する規範として、最も適切なものはどれか？",
+              choices:[
+                {text:"法人格が全くの形骸にすぎない場合、又は法律の適用を回避するために濫用されている場合には、法人格を否認し、会社とその背後の個人とを同一視することができると解する。", correct:true},
+                {text:"株式会社の法人格は、いかなる場合にも否認されないと解する。", correct:false, hint:"これは法人格否認の法理そのものを否定する規範であり、判例（最判昭和44年2月27日）と矛盾します。"},
+                {text:"株主有限責任の原則により、株主は常に会社の債務について一切責任を負わないと解する。", correct:false, hint:"これでは法人格否認の法理という例外の存在を無視してしまいます。"}
+              ]},
+            { instruction:"規範を本件の事実にあてはめる記述として、最も適切なものはどれか？",
+              choices:[
+                {text:"本問では、Y社は資本金以外に実体的な財産や独自の意思決定機関を有さず、Bがすべてを自己の判断で動かしており、Y社の法人格は全くの形骸にすぎないと評価できる。したがって、法人格否認の法理により、XはBに対して直接債務の履行を求めることができる。", correct:true},
+                {text:"本問では、Y社が株式会社として登記されている以上、法人格は否認されない。", correct:false, hint:"登記の有無（形式）と、実体が形骸化しているか（実質）は別問題です。規範は実体面を問うています。"},
+                {text:"本問では、Bが個人事業主であったことがあるというだけで、法人格は当然に否認される。", correct:false, hint:"過去の経緯だけでなく、規範が示す現在の実体（財産・意思決定機関の有無）を具体的に検討する必要があります。"}
+              ]}
+          ]
+        },
+        {
+          title: "取締役の第三者責任",
+          desc: "取締役の任務懈怠により損害を被った会社債権者の救済を構成する。",
+          facts: "株式会社Yの取締役Bは、放漫な経営を続け、明らかに実現不可能な事業に会社財産を注ぎ込んだ結果、Yは倒産した。Yの取引先であったXは、Yから売掛金の支払いを受けられず損害を被った。Xは、Bに対して直接損害賠償を求めたい。",
+          steps: [
+            { instruction:"この事例で、まず何が問題になるかを正しく指摘しているのはどれか？",
+              choices:[
+                {text:"本件では、取締役Bの任務懈怠により会社Yが損害を被った結果、間接的に損害を被った債権者Xが、会社法429条1項に基づきBに直接損害賠償を求められるかが問題となる。", correct:true},
+                {text:"本件では、Yの設立が無効であったかが問題となる。", correct:false, hint:"事例は設立段階ではなく、設立後の取締役の経営判断（任務懈怠）が問題となる場面です。"},
+                {text:"本件では、XY間の売買契約が公序良俗に反し無効かが問題となる。", correct:false, hint:"売掛金債権の発生原因である取引自体の有効性は争いになっていません。争点はBの責任の有無です。"}
+              ]},
+            { instruction:"問題提起に対応する規範として、最も適切なものはどれか？",
+              choices:[
+                {text:"429条1項の責任は、会社が経済社会において重要な地位を占め、その活動が取締役の職務執行に依存する実情を考慮し、第三者保護のために特別に法定された責任（法定責任）であると解する。取締役に悪意又は重大な過失による任務懈怠があり、それにより第三者に損害が生じた場合には、会社が被った損害の結果第三者が被った損害（間接損害）であるかを問わず、責任が認められると解する。", correct:true},
+                {text:"429条1項の責任は、取締役と第三者との間の契約責任であると解する。", correct:false, hint:"取締役と第三者（本件のX）との間に契約関係はありません。判例は法定責任説に立ち、契約責任とは異なる構成を採用しています。"},
+                {text:"取締役は会社に対してのみ責任を負い、第三者に対して直接責任を負うことは一切ないと解する。", correct:false, hint:"429条1項はまさに取締役の第三者に対する責任を定めた規定であり、これを否定する規範は条文と矛盾します。"}
+              ]},
+            { instruction:"規範を本件の事実にあてはめる記述として、最も適切なものはどれか？",
+              choices:[
+                {text:"本問では、Bは明らかに実現不可能な事業に会社財産を注ぎ込むという著しく軽率な経営判断を行っており、少なくとも重大な過失による任務懈怠が認められる。これによりYが損害を被り、その結果Xが売掛金の回収不能という損害（間接損害）を被った以上、Bは429条1項に基づき損害賠償責任を負う。", correct:true},
+                {text:"本問では、Xの損害はYの倒産という会社の損害を介した間接損害にすぎないから、Bは一切責任を負わない。", correct:false, hint:"規範は「間接損害であるかを問わず責任が認められる」としています。間接損害であることを理由に責任を否定するのは規範と矛盾します。"},
+                {text:"本問では、Bの経営判断が結果的に失敗したというだけで、当然に重大な過失が認められる。", correct:false, hint:"結果論だけで重過失を認定するのは不十分です。「明らかに実現不可能な事業」への投資という、判断の著しい不合理性を具体的に指摘する必要があります。"}
+              ]}
+          ]
+        },
+        {
+          title: "表見代表取締役",
+          desc: "代表権のない取締役の行為について会社の責任を構成する。",
+          facts: "株式会社Yは、代表権を持たない取締役Bに「副社長」という肩書の使用を認めていた。Bはこの肩書を用いて、代表取締役に無断で会社を代表する形で第三者Xと契約を締結した。Xは、Bに代表権があると信じて契約したが、Bには実際には代表権がなかった。Xは、Yに対して契約上の責任を追及したい。",
+          steps: [
+            { instruction:"この事例で、まず何が問題になるかを正しく指摘しているのはどれか？",
+              choices:[
+                {text:"本件では、Bが表見代表取締役（会社法354条）にあたり、Yが善意のXに対して契約上の責任を負うかが問題となる。", correct:true},
+                {text:"本件では、Bが取締役として適法に選任されていたかが問題となる。", correct:false, hint:"Bが取締役であること自体は前提とされています。問題は「代表権」があるかのような外観が生じた場合の会社の責任です。"},
+                {text:"本件では、XB間の契約が要式行為として無効かが問題となる。", correct:false, hint:"契約の方式（要式性）は事例上問題となっていません。争点は代表権の外観と会社の責任です。"}
+              ]},
+            { instruction:"問題提起に対応する規範として、最も適切なものはどれか？",
+              choices:[
+                {text:"会社法354条は、社長・副社長その他会社を代表する権限を有するものと認められる名称を代表権のない取締役に付した場合、会社は善意の第三者に対して当該取締役の行為につき責任を負うと定めており、これは代表権があるかのような外観の作出について会社に帰責性があることを前提に、外観を信頼した第三者を保護する権利外観法理の一場面であると解する。", correct:true},
+                {text:"取締役が代表権を有しない以上、いかなる名称を付されていても、会社は一切責任を負わないと解する。", correct:false, hint:"これは354条の規定自体を否定する規範であり、条文と矛盾します。"},
+                {text:"表見代表取締役の責任は、相手方の善意・悪意を問わず常に会社が負うと解する。", correct:false, hint:"354条は「善意の第三者に対して」責任を負うと定めており、相手方の善意は要件です。悪意の相手方には適用されません。"}
+              ]},
+            { instruction:"規範を本件の事実にあてはめる記述として、最も適切なものはどれか？",
+              choices:[
+                {text:"本問では、Yは代表権のないBに「副社長」という、会社を代表する権限を有すると認められる名称の使用を認めており、外観作出についての帰責性が認められる。Xはこの名称を信頼してBに代表権があると信じたのであるから、善意の第三者にあたる。したがって、Yは354条によりBの行為についての責任を負う。", correct:true},
+                {text:"本問では、Bに真実の代表権がなかった以上、Yは契約上の責任を一切負わない。", correct:false, hint:"354条はまさに「真実の代表権がない場合」に会社の責任を認める規定であり、代表権の不存在のみで結論を出すのは規範を無視しています。"},
+                {text:"本問では、Xが会社の登記簿を確認していなかった以上、過失があり保護されない。", correct:false, hint:"354条の文言上は「善意」が要件であり、無過失までは明示的に要求されていません（学説上議論はあるが、条文上は善意で足りるとするのが一般的な理解です）。登記の不確認のみで一律に保護を否定するのは正確ではありません。"}
+              ]}
+          ]
+        },
+        {
+          title: "名板貸人の責任",
+          desc: "自己の商号使用を許諾した者の第三者に対する責任を構成する。",
+          facts: "商人Aは、Bに対して自己の商号「A商店」を使用して営業することを許諾していた。BはA商店の名義で顧客Xと取引を行ったが、代金を支払わずXは損害を被った。Xは、BがA商店の名義で営業していたことから、Aを取引の相手方であると誤認していた。Xは、Aに対して責任を追及したい。",
+          steps: [
+            { instruction:"この事例で、まず何が問題になるかを正しく指摘しているのはどれか？",
+              choices:[
+                {text:"本件では、Aが商法14条にいう名板貸人として、Bの行為について責任を負うかが問題となる。", correct:true},
+                {text:"本件では、AB間の商号使用許諾契約が公序良俗に反し無効かが問題となる。", correct:false, hint:"商号の使用許諾自体は商法上適法な行為であり、公序良俗違反は事例上問題となっていません。"},
+                {text:"本件では、Bが商人としての資格を有していたかが問題となる。", correct:false, hint:"Bが営業を行っていたことは事例上前提とされており、商人資格の有無自体は争点ではありません。"}
+              ]},
+            { instruction:"問題提起に対応する規範として、最も適切なものはどれか？",
+              choices:[
+                {text:"商法14条は、自己の商号を使用して営業を行うことを他人に許諾した商人（名板貸人）は、その他人（名板借人）が当該営業を行うものと誤認して取引した相手方に対し、当該他人と連帯して責任を負うと定める。この責任は、外観を信頼した相手方を保護する権利外観法理の現れであると解する。", correct:true},
+                {text:"名板貸人は、名板借人の行為について、相手方の認識の有無にかかわらず常に責任を負うと解する。", correct:false, hint:"商法14条は「誤認して取引した」相手方を保護する規定であり、相手方が名板貸の事実を知っていた（誤認していなかった）場合には適用されません。"},
+                {text:"名板貸人の責任は、商号の使用許諾について書面による契約がある場合にのみ生じると解する。", correct:false, hint:"商法14条にそのような方式の要件はありません。許諾は明示・黙示を問わず認められると解されています。"}
+              ]},
+            { instruction:"規範を本件の事実にあてはめる記述として、最も適切なものはどれか？",
+              choices:[
+                {text:"本問では、Aは自己の商号「A商店」の使用をBに許諾しており、Xはこの商号からAを取引の相手方であると誤認して取引している。したがって、Aは名板貸人として、商法14条によりBと連帯して責任を負う。", correct:true},
+                {text:"本問では、実際に取引を行ったのはBであり契約の当事者ではないAには、いかなる場合も責任は生じない。", correct:false, hint:"商法14条はまさに実際の取引当事者ではない名板貸人に責任を負わせる特別の規定です。実際の取引主体でないことのみを理由に責任を否定するのは規範を無視しています。"},
+                {text:"本問では、AB間に商号使用の許諾があった事実さえあれば、Xの認識の状態を問わず常にAは責任を負う。", correct:false, hint:"商法14条の適用には、相手方が名板借人を名板貸人と誤認したことが要件です。Xの認識状態（誤認の有無）を問わないとする規範は不正確です。"}
+              ]}
+          ]
+        },
+        {
+          title: "株主総会決議取消しの訴え",
+          desc: "招集手続に瑕疵がある株主総会決議の効力を構成する。",
+          facts: "株式会社Yは、定時株主総会を招集するにあたり、一部の株主Xに対して法定の招集通知期間を満たさずに通知を発した。Xはこの瑕疵を知りつつ総会に出席し意見を述べたが、特に異議を述べなかった。総会では取締役選任決議が可決された。Xは後になってこの決議の効力を争いたいと考えている。",
+          steps: [
+            { instruction:"この事例で、まず何が問題になるかを正しく指摘しているのはどれか？",
+              choices:[
+                {text:"本件では、招集手続の法令違反（招集通知期間の不足）を理由に、株主総会決議取消しの訴え（会社法831条1項1号）を提起できるかが問題となる。", correct:true},
+                {text:"本件では、Yの設立が無効であったかが問題となる。", correct:false, hint:"問題となっているのは設立段階ではなく、設立後の株主総会という機関の決議の効力です。"},
+                {text:"本件では、Xが株主としての資格を有していたかが問題となる。", correct:false, hint:"Xが株主であることは前提とされています。争点は招集手続の瑕疵が決議の効力に与える影響です。"}
+              ]},
+            { instruction:"問題提起に対応する規範として、最も適切なものはどれか？",
+              choices:[
+                {text:"株主総会の招集手続が法令に違反する場合、株主は決議の日から3か月以内に決議取消しの訴えを提起できると解する（831条1項1号）。もっとも、瑕疵のある招集通知を受けた株主が、その瑕疵を知りながら異議を述べずに総会に出席し議決権を行使した等の事情がある場合には、取消事由としての瑕疵の主張が信義則上制限される余地があると解する。", correct:true},
+                {text:"招集手続にいかなる瑕疵があっても、決議は当然に無効となると解する。", correct:false, hint:"会社法は、招集手続の法令違反を「取消事由」として扱っており（831条1項1号）、無効事由や不存在事由とは区別しています。「当然に無効」という規範は不正確です。"},
+                {text:"招集手続の瑕疵は、決議の効力に一切影響を与えないと解する。", correct:false, hint:"831条1項1号はまさに招集手続の法令違反を決議取消事由として定めており、これを否定する規範は条文と矛盾します。"}
+              ]},
+            { instruction:"規範を本件の事実にあてはめる記述として、最も適切なものはどれか？",
+              choices:[
+                {text:"本問では、Yは招集通知期間を満たさずにXに通知しており、これは招集手続の法令違反にあたる。もっとも、Xはこの瑕疵を知りながら総会に出席して意見を述べ、特に異議を述べていない。この事情によっては、瑕疵の主張が信義則上制限される可能性を検討する必要があるが、少なくとも招集手続の法令違反自体は認められ、取消事由に該当する。", correct:true},
+                {text:"本問では、Xが総会に出席して意見を述べた以上、招集手続の瑕疵はもはや一切問題にならない。", correct:false, hint:"出席・異議不述べという事情は信義則上の制限を検討する考慮要素にとどまり、招集手続の瑕疵自体が当然に治癒されるとまでは言い切れません。規範に照らした慎重な検討が必要です。"},
+                {text:"本問では、招集通知期間の不足がある以上、決議は当然に不存在となる。", correct:false, hint:"招集手続の法令違反は取消事由（831条1項1号）であり、決議が全く存在しないとみなされる「不存在」（830条）とは異なる類型です。"}
+              ]}
+          ]
+        }
+      ]
+    },
+    {
+      name: "民事訴訟法", icon: "民訴",
+      problems: [
+        {
+          title: "既判力の客観的範囲",
+          desc: "相殺の抗弁について理由中の判断に既判力が生じることを構成する。",
+          facts: "XはYに対し貸金100万円の返還を求めて訴えを提起した。これに対しYは、Xに対して有する100万円の売買代金債権をもって相殺する旨の抗弁を提出し、裁判所はこの相殺の抗弁を認めてXの請求を棄却した。Yは、後になって別訴で同じ売買代金債権を主張できるかが問題となった。",
+          steps: [
+            { instruction:"この事例で、まず何が問題になるかを正しく指摘しているのはどれか？",
+              choices:[
+                {text:"本件では、相殺の抗弁についての判断（理由中の判断）に既判力が生じ、Yが別訴で同じ売買代金債権を主張することが遮断されないかが問題となる。", correct:true},
+                {text:"本件では、Xの貸金債権が時効消滅していたかが問題となる。", correct:false, hint:"消滅時効は事例上問題となっていません。争点は既に確定した判決の効力（既判力）の範囲です。"},
+                {text:"本件では、XY間の訴訟に二重起訴禁止（142条）違反があったかが問題となる。", correct:false, hint:"事例は前訴確定後の後訴における主張の可否が問題であり、同時係属を問題とする二重起訴禁止とは場面が異なります。"}
+              ]},
+            { instruction:"問題提起に対応する規範として、最も適切なものはどれか？",
+              choices:[
+                {text:"既判力は原則として判決主文の判断（訴訟物についての判断）にのみ生じ、判決理由中の判断には及ばない（114条1項）。もっとも、相殺のために主張した反対債権の成立又は不成立の判断については、相殺をもって対抗した額について既判力を有する（114条2項）。これは、相殺の抗弁について既判力を認めないと、被告が同一の債権を別訴で再度主張でき、原告に二重の応訴の危険を負わせることになるためである。", correct:true},
+                {text:"既判力は判決理由中の判断もすべて含めて生じると解する。", correct:false, hint:"114条1項により既判力は原則として主文の判断にのみ生じます。理由中の判断すべてに既判力を認めるのは条文と矛盾します。"},
+                {text:"相殺の抗弁についての判断には、既判力は一切生じないと解する。", correct:false, hint:"114条2項はまさに相殺の抗弁について例外的に既判力を認める規定です。これを否定する規範は条文と矛盾します。"}
+              ]},
+            { instruction:"規範を本件の事実にあてはめる記述として、最も適切なものはどれか？",
+              choices:[
+                {text:"本問では、Yの相殺の抗弁が認められ、相殺をもって対抗した100万円の限度で売買代金債権の成立が判断されている。したがって、114条2項によりこの判断に既判力が生じ、Yは別訴において同じ売買代金債権が有効に存在したことを主張して重ねて履行を求めることはできない。", correct:true},
+                {text:"本問では、相殺の抗弁は判決理由中の判断にすぎないから、既判力は一切生じず、Yは別訴で自由に同じ債権を主張できる。", correct:false, hint:"規範が示した114条2項の例外（相殺の抗弁には既判力が生じる）を無視しています。原則（理由中の判断には既判力なし）のみを適用する誤りです。"},
+                {text:"本問では、既判力は訴訟物である貸金債権についてのみ生じ、相殺に用いられた売買代金債権とは無関係である。", correct:false, hint:"114条2項は、訴訟物ではない反対債権（相殺に供した債権）について例外的に既判力を認める特則です。「無関係」とする規範はこの特則を見落としています。"}
+              ]}
+          ]
+        },
+        {
+          title: "二重起訴の禁止",
+          desc: "同一の紛争について既に係属中の別訴があることの効果を構成する。",
+          facts: "XはYに対して貸金返還請求訴訟を提起し、この訴訟は現在も係属中である。ところがXは、同じ貸金債権について、Yに対し重ねて別の裁判所に給付訴訟を提起した。Yは、後訴が不適法ではないかと主張したい。",
+          steps: [
+            { instruction:"この事例で、まず何が問題になるかを正しく指摘しているのはどれか？",
+              choices:[
+                {text:"本件では、後訴が民事訴訟法142条の禁止する二重起訴（重複訴訟）にあたり、不適法として却下されないかが問題となる。", correct:true},
+                {text:"本件では、Xの貸金債権が消滅時効にかかっていたかが問題となる。", correct:false, hint:"消滅時効の成否は事例上問題となっていません。争点は同一事件について複数訴訟が係属していることの手続的な適法性です。"},
+                {text:"本件では、Yが反訴を提起できるかが問題となる。", correct:false, hint:"反訴の可否ではなく、Xが提起した後訴自体の適法性が問題となっています。"}
+              ]},
+            { instruction:"問題提起に対応する規範として、最も適切なものはどれか？",
+              choices:[
+                {text:"142条は、裁判所に係属する事件については、当事者は更に訴えを提起することができないと定める。これは、同一の紛争について複数の訴訟が並行することによる審理の重複・矛盾判決の危険・被告の応訴負担の増大を防止する趣旨であり、当事者及び訴訟物が同一である訴えの重複提起はこれにあたると解する。", correct:true},
+                {text:"142条は、原告が異なる裁判所に訴えを提起することを一般的に禁止する規定であると解する。", correct:false, hint:"142条が禁止するのは「同一の事件」についての重複提起であり、異なる事件について複数の訴訟を提起すること自体を一般に禁じるものではありません。"},
+                {text:"既に係属中の訴訟がある場合、後から提起された訴えは当然に無効な訴えとなり、訴訟係属自体が生じないと解する。", correct:false, hint:"二重起訴にあたる後訴は「不適法」として却下される対象であり、訴え自体が当然に無効・不存在になるわけではありません。訴訟要件の問題として扱われます。"}
+              ]},
+            { instruction:"規範を本件の事実にあてはめる記述として、最も適切なものはどれか？",
+              choices:[
+                {text:"本問では、前訴と後訴は当事者（X・Y）及び訴訟物（同一の貸金返還請求権）が同一であり、前訴が現に係属中である。したがって、後訴は142条の禁止する重複訴訟にあたり、不適法として却下される。", correct:true},
+                {text:"本問では、裁判所が異なる以上、後訴は前訴と別個の事件として適法に係属する。", correct:false, hint:"142条の趣旨は「同一事件」の重複審理を防止することにあり、提起先の裁判所が異なることは重複訴訟該当性の判断に影響しません。"},
+                {text:"本問では、Xが同一債権について訴えを提起している以上、前訴が当然に取り下げられたものとみなされる。", correct:false, hint:"二重起訴の効果は後訴が不適法却下されることであり、前訴が自動的に取り下げられたとみなされるわけではありません。"}
+              ]}
+          ]
+        },
+        {
+          title: "既判力の時的限界",
+          desc: "基準時後の形成権行使が既判力によって遮断されないことを構成する。",
+          facts: "XはYに対する貸金返還請求訴訟で勝訴し、判決が確定した。Yは、この訴訟の事実審口頭弁論終結時より前から、Xに対する別の債権（反対債権）を有していたが、訴訟中にこれを主張せず相殺もしなかった。判決確定後、Yはこの反対債権をもって相殺の意思表示を行い、確定判決に基づく強制執行を阻止したいと考えている。",
+          steps: [
+            { instruction:"この事例で、まず何が問題になるかを正しく指摘しているのはどれか？",
+              choices:[
+                {text:"本件では、Yが基準時（事実審口頭弁論終結時）後に行った相殺の意思表示が、前訴確定判決の既判力によって遮断されないかが問題となる。", correct:true},
+                {text:"本件では、Xの貸金債権が二重に請求されていないかが問題となる。", correct:false, hint:"Xは既に確定判決を得ており、二重起訴の問題ではなく、確定判決後の執行段階での争いです。"},
+                {text:"本件では、Yに反対債権を有効に取得する意思があったかが問題となる。", correct:false, hint:"Yが反対債権を有していたこと自体は前提とされています。争点は既判力による主張の遮断の有無です。"}
+              ]},
+            { instruction:"問題提起に対応する規範として、最も適切なものはどれか？",
+              choices:[
+                {text:"既判力は事実審の口頭弁論終結時（基準時）を基準として生じ、基準時以前に存在した事由に基づく主張は後訴（請求異議訴訟等）で遮断される。もっとも、相殺権のような形成権については、基準時前に権利自体は存在していても、その行使（意思表示）を基準時前にすべき義務まではなく、基準時後に行使された場合には既判力による遮断を受けないと解する余地がある。", correct:true},
+                {text:"基準時前に存在した事由に基づく主張は、権利の性質を問わず一切後訴で主張できないと解する。", correct:false, hint:"相殺権のような形成権については、基準時前に権利者に行使を強制する理由に乏しいことから、遮断されないと解する余地が認められています。この規範は形成権の特殊性を考慮していません。"},
+                {text:"既判力に時的限界という概念は存在せず、確定判決の効力はあらゆる時点の事由に及ぶと解する。", correct:false, hint:"既判力の時的限界（基準時）は既判力論の基本的な枠組みであり、これを否定する規範は誤りです。"}
+              ]},
+            { instruction:"規範を本件の事実にあてはめる記述として、最も適切なものはどれか？",
+              choices:[
+                {text:"本問では、Yは基準時前から反対債権を有していたものの、相殺の意思表示という権利行使自体は判決確定後に行っている。相殺権の行使を基準時前に強制される理由はないから、この相殺の主張は既判力によって遮断されず、Yは請求異議の訴え等でこれを主張することができる。", correct:true},
+                {text:"本問では、反対債権は基準時前から存在していたのだから、その主張は当然に既判力によって遮断される。", correct:false, hint:"規範は「権利の存在」と「権利の行使（意思表示）の時期」を区別しています。存在していたことのみをもって遮断されるとするのは、この区別を踏まえていません。"},
+                {text:"本問では、Yが訴訟中に相殺の抗弁を提出しなかった以上、その一事をもって信義則違反となり、相殺の主張は常に許されない。", correct:false, hint:"提出しなかったことから直ちに信義則違反を導くのは、規範が示す「形成権の行使時期に関する遮断の有無」という検討を経ていない飛躍した結論です。"}
+              ]}
+          ]
+        },
+        {
+          title: "弁論主義と主張責任",
+          desc: "当事者が主張していない事実を裁判所が判決の基礎にできるかを構成する。",
+          facts: "XはYに対し、消費貸借契約に基づく貸金返還請求訴訟を提起した。訴訟の証拠調べの中で、Yが既に一部弁済していた事実をうかがわせる証拠が現れたが、Y自身はこの弁済の事実を主張していなかった。裁判所は、この証拠に基づいて一部弁済の事実を認定し、請求の一部を棄却する判決をすることができるかが問題となった。",
+          steps: [
+            { instruction:"この事例で、まず何が問題になるかを正しく指摘しているのはどれか？",
+              choices:[
+                {text:"本件では、当事者Yが主張していない弁済の事実を、裁判所が証拠のみに基づいて判決の基礎とすることが、弁論主義（主張責任）に反しないかが問題となる。", correct:true},
+                {text:"本件では、Xの貸金債権の成立自体が争われているかが問題となる。", correct:false, hint:"消費貸借契約の成立自体は前提とされています。争点は、当事者が主張していない事実を裁判所が認定できるかです。"},
+                {text:"本件では、証拠調べの手続に違法があったかが問題となる。", correct:false, hint:"証拠調べの手続自体に瑕疵があったという事情は示されていません。争点は主張と証拠の関係（弁論主義）です。"}
+              ]},
+            { instruction:"問題提起に対応する規範として、最も適切なものはどれか？",
+              choices:[
+                {text:"弁論主義のもとでは、裁判所は当事者が弁論において主張していない主要事実を判決の基礎とすることができないと解する（主張責任）。証拠調べにより主要事実の存在をうかがわせる資料が顕出されたとしても、当事者がこれを弁論で陳述し主張しない限り、裁判所はこれを判決の基礎とすることができない。", correct:true},
+                {text:"証拠調べによって明らかになった事実であれば、当事者の主張の有無にかかわらず、裁判所は自由にこれを判決の基礎とすることができると解する。", correct:false, hint:"これは弁論主義（主張責任）の内容と矛盾します。弁論主義のもとでは、証拠から明らかな事実であっても、当事者の主張がなければ判決の基礎にできません。"},
+                {text:"弁論主義は事実の主張には適用されず、証拠の申出についてのみ適用される原則であると解する。", correct:false, hint:"弁論主義は、主張責任（事実の主張）・自白の拘束力・職権証拠調べの禁止という複数のテーゼから構成されており、事実の主張にも適用されます。"}
+              ]},
+            { instruction:"規範を本件の事実にあてはめる記述として、最も適切なものはどれか？",
+              choices:[
+                {text:"本問では、一部弁済の事実をうかがわせる証拠が現れたとしても、Y自身がこの事実を弁論において主張していない以上、裁判所はこれを判決の基礎とすることができない。したがって、裁判所は当該証拠のみに基づいて請求の一部を棄却する判決をすることはできない。", correct:true},
+                {text:"本問では、弁済をうかがわせる証拠が存在する以上、裁判所は職権でこれを判決の基礎とすべきである。", correct:false, hint:"弁論主義のもとでは、証拠の存在のみでは足りず、当事者による事実の主張が必要です。「職権で基礎とすべき」という結論は規範と矛盾します。"},
+                {text:"本問では、Yが弁済の事実を主張していない以上、裁判所はこの証拠を一切証拠として採用することもできない。", correct:false, hint:"弁論主義が制限するのは「主張していない主要事実を判決の基礎とすること」であり、証拠の取調べ自体を禁止するものではありません（証拠調べの結果は他の主張事実の心証形成に使われることもあります）。規範の射程を超えた結論です。"}
+              ]}
+          ]
+        },
+        {
+          title: "訴訟物論争",
+          desc: "所有権に基づく請求と契約に基づく請求の訴訟物の異同を構成する。",
+          facts: "Xは、Yに対して甲建物の明渡しを求めるにあたり、まず賃貸借契約の終了に基づく返還請求として訴えを提起したが敗訴し、判決が確定した。Xは、同じ甲建物について、今度は所有権に基づく返還請求として改めて訴えを提起できるかが問題となった。",
+          steps: [
+            { instruction:"この事例で、まず何が問題になるかを正しく指摘しているのはどれか？",
+              choices:[
+                {text:"本件では、賃貸借契約終了に基づく返還請求と、所有権に基づく返還請求とが、訴訟物として同一かどうか（訴訟物の個数・単複）が問題となる。", correct:true},
+                {text:"本件では、Xが甲建物の所有権を有していたかが問題となる。", correct:false, hint:"所有権の有無自体ではなく、それに基づく請求が前訴と「同じ訴訟物」を構成するかという手続法上の問題が焦点です。"},
+                {text:"本件では、Yが甲建物を不法占拠していたかが問題となる。", correct:false, hint:"占拠の適法性そのものではなく、前訴で確定した判決の効力（既判力）が後訴にどう及ぶかが問題です。"}
+              ]},
+            { instruction:"問題提起に対応する規範として、最も適切なものはどれか？",
+              choices:[
+                {text:"訴訟物の個数・単複について、判例・実務が採用する旧訴訟物理論は、実体法上の請求権ごとに訴訟物が異なると解する。したがって、賃貸借契約終了に基づく返還請求権と所有権に基づく返還請求権とは、実体法上別個の請求権であり、訴訟物を異にすると解する。", correct:true},
+                {text:"訴訟物は、給付を求める目的物が同一であれば、請求を基礎づける実体法上の権利が異なっても常に同一の訴訟物であると解する。", correct:false, hint:"これは新訴訟物理論（給付内容や紛争の同一性に着目する立場）に近い考え方ですが、判例・実務が採用する旧訴訟物理論とは異なります。「常に同一」と言い切るのは不正確です。"},
+                {text:"訴訟物という概念は民事訴訟法上存在せず、常に事件ごとに個別に判断されると解する。", correct:false, hint:"訴訟物は既判力の範囲等を画する基本概念であり、その存在自体を否定する規範は誤りです。"}
+              ]},
+            { instruction:"規範を本件の事実にあてはめる記述として、最も適切なものはどれか？",
+              choices:[
+                {text:"本問では、前訴の訴訟物は賃貸借契約終了に基づく返還請求権であるのに対し、後訴で主張しようとするのは所有権に基づく返還請求権であり、旧訴訟物理論によればこれらは実体法上別個の請求権として異なる訴訟物を構成する。したがって、前訴の既判力は後訴に及ばず、Xは所有権に基づく返還請求訴訟を改めて提起することができる。", correct:true},
+                {text:"本問では、同じ甲建物の明渡しを求めている以上、訴訟物は同一であり、前訴の既判力により後訴は許されない。", correct:false, hint:"旧訴訟物理論は請求権の同一性（実体法上の権利ごと）で訴訟物を区別します。給付の目的物（建物）が同じであることのみで訴訟物の同一性を判断するのは規範と整合しません。"},
+                {text:"本問では、前訴で敗訴している以上、Xはもはやいかなる法律構成によっても甲建物の明渡しを求めることはできない。", correct:false, hint:"訴訟物が異なれば既判力は及ばないというのが規範の帰結であり、「もはや一切請求できない」という結論はこれと矛盾します。"}
+              ]}
+          ]
+        }
+      ]
+    },
+    {
+      name: "刑事訴訟法", icon: "刑訴",
+      problems: [
+        {
+          title: "強制処分法定主義・任意捜査の限界",
+          desc: "無令状での有形力行使が任意捜査として許容されるかを構成する。",
+          facts: "警察官は、覚醒剤使用の疑いがある被疑者Aを職務質問した際、Aが逃げようとしたため、その腕を掴んで引き止め、必要最小限度の有形力を用いてその場に留めた。Aは、この行為が令状なしに行われた違法な強制処分にあたると主張したい。",
+          steps: [
+            { instruction:"この事例で、まず何が問題になるかを正しく指摘しているのはどれか？",
+              choices:[
+                {text:"本件では、警察官による有形力の行使が、令状を要する「強制の処分」（刑訴法197条1項ただし書）にあたるか、それとも適法な任意捜査の範囲内にとどまるかが問題となる。", correct:true},
+                {text:"本件では、Aに覚醒剤使用の故意があったかが問題となる。", correct:false, hint:"本件は捜査段階における有形力行使の適法性が問題となっており、実体法上の故意の有無は争点ではありません。"},
+                {text:"本件では、Aの覚醒剤所持が現行犯にあたるかが問題となる。", correct:false, hint:"事例は現行犯逮捕の場面ではなく、職務質問中の有形力行使の適法性が問題となっています。"}
+              ]},
+            { instruction:"問題提起に対応する規範として、最も適切なものはどれか？",
+              choices:[
+                {text:"強制の処分とは、相手方の意思に反して重要な権利・利益を実質的に制約する処分をいうと解する。有形力の行使を伴う任意捜査であっても、事案の性質、行為の必要性・緊急性、これと侵害される個人の法益との権衡等を考慮し、具体的状況のもとで相当と認められる限度において許容されると解する。", correct:true},
+                {text:"有形力を用いた行為は、その程度を問わず、常に令状を要する強制処分にあたると解する。", correct:false, hint:"判例（最決昭和51年3月16日）は、必要最小限度の有形力の行使であれば、任意捜査として許容される場合があるとしています。「常に強制処分」とする規範は判例より厳格すぎます。"},
+                {text:"任意捜査には、いかなる限界もなく、警察官の裁量で自由に行うことができると解する。", correct:false, hint:"任意捜査であっても、必要性・緊急性と法益侵害の程度との権衡による相当性の限界があります。「限界がない」という規範は誤りです。"}
+              ]},
+            { instruction:"規範を本件の事実にあてはめる記述として、最も適切なものはどれか？",
+              choices:[
+                {text:"本問では、覚醒剤使用の疑いがある被疑者が逃走しようとした状況で、警察官が必要最小限度の有形力を用いてこれを引き止めた行為は、職務質問の実効性を確保するための必要性・緊急性が認められ、法益侵害の程度も軽微であることから、具体的状況のもとで相当と認められる任意捜査の範囲内にとどまる。", correct:true},
+                {text:"本問では、有形力が用いられた以上、その程度を問わず当然に令状を要する強制処分にあたる。", correct:false, hint:"規範は「必要最小限度の有形力であれば任意捜査として許容されうる」としています。有形力行使の事実のみで強制処分と決めつけるのは規範に沿っていません。"},
+                {text:"本問では、Aが逃げようとしたことをもって、現行犯逮捕の要件を満たすため令状は不要である。", correct:false, hint:"本件は現行犯逮捕の話ではなく、任意捜査としての有形力行使の適法性が問題となっています。争点をすり替えています。"}
+              ]}
+          ]
+        },
+        {
+          title: "自白の任意性・補強法則",
+          desc: "長時間の取調べによる自白の証拠能力と、自白のみでの有罪認定の可否を構成する。",
+          facts: "被疑者Aは、長時間にわたる連続した取調べの末に犯行を自白したが、この自白を裏付ける客観的な証拠は見当たらなかった。検察官は、この自白のみを主要な証拠としてAを起訴した。",
+          steps: [
+            { instruction:"この事例で、まず何が問題になるかを正しく指摘しているのはどれか？",
+              choices:[
+                {text:"本件では、①長時間の取調べによる自白が任意性を欠き証拠能力を否定されないか、②仮に証拠能力が認められるとしても、自白のみを唯一の証拠として有罪認定できるかが問題となる。", correct:true},
+                {text:"本件では、Aに責任能力が認められるかが問題となる。", correct:false, hint:"事例に責任能力を疑わせる事情は示されていません。争点は自白という証拠の評価（任意性・補強証拠の要否）です。"},
+                {text:"本件では、Aの弁護人選任権が侵害されたかが問題となる。", correct:false, hint:"弁護人選任権に関する具体的な事情は示されていません。争点は自白の証拠能力・証明力です。"}
+              ]},
+            { instruction:"問題提起に対応する規範として、最も適切なものはどれか？",
+              choices:[
+                {text:"強制、拷問又は脅迫による自白、不当に長く抑留又は拘禁された後の自白その他任意にされたものでない疑いのある自白は、証拠とすることができない（刑訴法319条1項）。また、被告人は、自白が自己に不利益な唯一の証拠である場合には、有罪とされない（同条2項、補強法則）ため、自白を補強する他の証拠が必要であると解する。", correct:true},
+                {text:"自白は被告人自身の供述であるから、その内容の真実性は常に高く、補強証拠は一切不要であると解する。", correct:false, hint:"319条2項はまさに自白のみでの有罪認定を禁止し、補強証拠を要求する規定です。これを不要とする規範は条文と矛盾します。"},
+                {text:"取調べの時間の長さは、自白の証拠能力にも証明力にも一切影響を与えないと解する。", correct:false, hint:"不当に長い抑留・拘禁の後の自白は任意性が否定されうる（319条1項）ため、取調べ時間の長さは関連する考慮要素です。"}
+              ]},
+            { instruction:"規範を本件の事実にあてはめる記述として、最も適切なものはどれか？",
+              choices:[
+                {text:"本問では、長時間にわたる連続した取調べの経緯次第では自白の任意性に疑いが生じうるが、それを措くとしても、自白を裏付ける客観的な補強証拠が見当たらない以上、自白のみを主要な証拠として有罪認定することはできない。", correct:true},
+                {text:"本問では、Aが自白した以上、その内容どおりに有罪と認定してよい。", correct:false, hint:"規範が示す補強法則（自白のみでは有罪とできない）を無視しています。補強証拠の有無を検討する必要があります。"},
+                {text:"本問では、取調べが長時間に及んだという事実のみでは、自白の証拠能力にも証明力にも一切影響しない。", correct:false, hint:"不当に長い抑留・拘禁の後の自白は任意性を否定されうるとする規範に照らせば、取調べの長時間化は無視できない考慮要素です。"}
+              ]}
+          ]
+        },
+        {
+          title: "違法収集証拠排除法則",
+          desc: "違法な逮捕手続後に得られた証拠の証拠能力を構成する。",
+          facts: "警察官は、法律上必要な令状を得ないまま、令状主義を潜脱する意図をもって被疑者Aを違法に逮捕し、その際にAの身体を捜索して覚醒剤を発見・押収した。検察官は、この覚醒剤をAの覚醒剤所持事件の証拠として提出しようとしている。",
+          steps: [
+            { instruction:"この事例で、まず何が問題になるかを正しく指摘しているのはどれか？",
+              choices:[
+                {text:"本件では、違法な逮捕手続に基づいて収集された証拠（覚醒剤）が、証拠能力を否定され排除されないかが問題となる。", correct:true},
+                {text:"本件では、Aに覚醒剤所持の故意があったかが問題となる。", correct:false, hint:"故意の有無ではなく、証拠収集手続の違法性が証拠能力に与える影響が争点です。"},
+                {text:"本件では、覚醒剤が「財物」にあたるかが問題となる。", correct:false, hint:"財物性は窃盗罪等の議論であり、覚醒剤所持事件における証拠法上の争点とは無関係です。"}
+              ]},
+            { instruction:"問題提起に対応する規範として、最も適切なものはどれか？",
+              choices:[
+                {text:"証拠物の押収手続に、憲法及び刑訴法の所定の令状主義の精神を没却するような重大な違法があり、これを証拠として許容することが将来における違法な捜査の抑制の見地から相当でないと認められる場合には、その証拠能力は否定されると解する。", correct:true},
+                {text:"証拠収集手続にいかなる瑕疵があっても、証拠として得られた物自体の価値には変わりがないから、証拠能力は常に肯定されると解する。", correct:false, hint:"これは違法収集証拠排除法則そのものを否定する規範であり、判例・実務の立場と矛盾します。"},
+                {text:"証拠収集手続に何らかの違法があれば、その軽重を問わず常に証拠能力が否定されると解する。", correct:false, hint:"判例は「令状主義の精神を没却するような重大な違法」という限定を付しており、軽微な瑕疵まで一律に証拠排除するものではありません。"}
+              ]},
+            { instruction:"規範を本件の事実にあてはめる記述として、最も適切なものはどれか？",
+              choices:[
+                {text:"本問では、警察官は令状主義を潜脱する意図をもって令状なしにAを違法に逮捕しており、これは令状主義の精神を没却する重大な違法にあたる。将来の違法捜査抑制の見地からも、この逮捕に伴って収集された覚醒剤の証拠能力は否定される。", correct:true},
+                {text:"本問では、実際に覚醒剤が発見された以上、逮捕手続の違法性にかかわらず証拠として採用すべきである。", correct:false, hint:"規範は「重大な違法があり証拠排除が相当と認められる場合には証拠能力が否定される」としています。発見された物の存在のみで結論を出すのは規範を無視しています。"},
+                {text:"本問では、Aが実際に覚醒剤を所持していた以上、逮捕の適法性は問題とならない。", correct:false, hint:"所持の事実（実体）と、証拠収集手続の適法性（手続）は別の問題です。手続的な違法の有無を検討せずに実体のみで結論を出すのは誤りです。"}
+              ]}
+          ]
+        },
+        {
+          title: "伝聞法則の例外",
+          desc: "公判外の供述を記載した書面の証拠能力を構成する。",
+          facts: "証人Vは、捜査段階で「Aが犯人である」旨を記載した供述調書に署名押印していたが、公判では記憶がないとして証言を拒んだ。検察官は、この供述調書を証拠として提出したいと考えている。",
+          steps: [
+            { instruction:"この事例で、まず何が問題になるかを正しく指摘しているのはどれか？",
+              choices:[
+                {text:"本件では、Vの供述調書が伝聞証拠にあたり原則として証拠能力を欠くところ、伝聞法則の例外規定により証拠能力が認められないかが問題となる。", correct:true},
+                {text:"本件では、Vに偽証罪が成立するかが問題となる。", correct:false, hint:"偽証罪の成否は公判での虚偽の証言が前提となりますが、本件でVは記憶がないとしているにとどまり、争点は供述調書という書面の証拠能力です。"},
+                {text:"本件では、Aに対する逮捕状の効力が問題となる。", correct:false, hint:"逮捕手続の適法性は事例上問題となっていません。争点は証拠法上の伝聞法則の適用です。"}
+              ]},
+            { instruction:"問題提起に対応する規範として、最も適切なものはどれか？",
+              choices:[
+                {text:"公判期日外における他の者の供述を内容とする供述証拠（伝聞証拠）は、原則として証拠能力を有しない（刑訴法320条1項）。もっとも、法が定める一定の要件（供述者が公判で供述できない事情があり、かつ供述の信用性の情況的保障がある場合等）を満たす書面については、例外的に証拠能力が認められると解する。", correct:true},
+                {text:"供述調書は捜査機関が作成した公的な書面であるから、伝聞法則の適用を受けず、常に証拠能力が認められると解する。", correct:false, hint:"供述調書も公判外の供述を内容とする限り伝聞証拠であり、320条1項の原則的な適用を受けます。作成主体が捜査機関であることのみで例外扱いされるわけではありません。"},
+                {text:"伝聞証拠は、内容の真実性にかかわらず、常に証拠として許容されると解する。", correct:false, hint:"これは伝聞法則そのものを否定する規範であり、320条1項と矛盾します。"}
+              ]},
+            { instruction:"規範を本件の事実にあてはめる記述として、最も適切なものはどれか？",
+              choices:[
+                {text:"本問では、Vの供述調書は公判外の供述を内容とする伝聞証拠にあたり原則として証拠能力を欠くが、Vが公判で記憶がないとして実質的に供述不能又はこれに準じる状態にあると評価できる場合には、伝聞例外規定の要件（供述不能等）を満たすかどうかを個別に検討し、これを満たせば証拠能力が認められる余地がある。", correct:true},
+                {text:"本問では、Vが署名押印している以上、内容の真実性を問わず当然に証拠として採用できる。", correct:false, hint:"署名押印の事実だけでは伝聞法則の例外要件を満たしません。伝聞例外の具体的要件（供述不能等）を検討する必要があります。"},
+                {text:"本問では、Vが公判で証言を拒んでいる以上、この供述調書はいかなる場合にも証拠として使用できない。", correct:false, hint:"伝聞例外規定は、まさに供述者が公判で供述できない場合を想定した規定であり、証言拒否の事実のみで一律に証拠排除されるわけではありません。"}
+              ]}
+          ]
+        },
+        {
+          title: "起訴便宜主義",
+          desc: "犯罪の嫌疑があるにもかかわらず不起訴とする検察官の裁量を構成する。",
+          facts: "検察官は、窃盗の嫌疑が十分に認められる被疑者Aについて、被害品が既に被害者に返還され、被害者も処罰を望んでおらず、Aが深く反省し再犯のおそれも低いと判断し、Aを起訴猶予として不起訴処分とした。被害者側の関係者Xは、犯罪の嫌疑がある以上起訴すべきであると主張したい。",
+          steps: [
+            { instruction:"この事例で、まず何が問題になるかを正しく指摘しているのはどれか？",
+              choices:[
+                {text:"本件では、犯罪の嫌疑が認められるにもかかわらず検察官が不起訴（起訴猶予）とする裁量権限（起訴便宜主義）が認められるかが問題となる。", correct:true},
+                {text:"本件では、Aに窃盗罪の構成要件該当性が認められるかが問題となる。", correct:false, hint:"事例上、窃盗の嫌疑が十分に認められることが前提とされています。争点は起訴・不起訴の判断に関する検察官の権限です。"},
+                {text:"本件では、Xが私人訴追（私人による起訴）をなしうるかが問題となる。", correct:false, hint:"日本の刑事訴訟制度は国家訴追主義・起訴独占主義を採用しており、被害者側が独自に起訴することは原則としてできません。事例の争点は検察官の不起訴判断の当否です。"}
+              ]},
+            { instruction:"問題提起に対応する規範として、最も適切なものはどれか？",
+              choices:[
+                {text:"刑訴法248条は、犯人の性格、年齢及び境遇、犯罪の軽重及び情状並びに犯罪後の情況により訴追を必要としないときは、公訴を提起しないことができると定める（起訴便宜主義）。これは、犯罪の嫌疑が認められる場合であっても、諸般の事情を考慮したうえで検察官に不起訴とする裁量権限を認める趣旨であると解する。", correct:true},
+                {text:"犯罪の嫌疑が認められる以上、検察官は必ず起訴しなければならないと解する（起訴法定主義）。", correct:false, hint:"日本の刑事訴訟法248条は起訴便宜主義を採用しており、嫌疑があっても不起訴とする裁量が認められています。「必ず起訴」とする規範は現行法と矛盾します。"},
+                {text:"起訴・不起訴の判断は、被害者の意向のみによって決定されると解する。", correct:false, hint:"248条は犯人の性格・年齢・境遇、犯罪の軽重、犯罪後の情況等、複数の考慮要素を掲げており、被害者の意向はその一要素にすぎません。"}
+              ]},
+            { instruction:"規範を本件の事実にあてはめる記述として、最も適切なものはどれか？",
+              choices:[
+                {text:"本問では、被害品が既に返還され、被害者も処罰を望んでおらず、Aが深く反省し再犯のおそれも低いという犯罪後の情況等の事情が認められる。これらは248条が掲げる考慮要素に該当するため、検察官がこれらを考慮して起訴猶予とした判断は、起訴便宜主義に基づく適法な裁量権の行使と評価できる。", correct:true},
+                {text:"本問では、窃盗の嫌疑が十分に認められる以上、検察官は起訴猶予とすることは一切許されない。", correct:false, hint:"規範は起訴便宜主義（248条）により、嫌疑があっても諸般の事情を考慮した不起訴が認められるとしています。嫌疑の存在のみで起訴義務を導くのは規範と矛盾します。"},
+                {text:"本問では、Xが起訴を求めている以上、検察官はXの意向に従って起訴しなければならない。", correct:false, hint:"起訴・不起訴の判断権限は検察官にあり、被害者側の関係者の意向に法的に拘束されるものではありません。"}
+              ]}
+          ]
+        }
+      ]
+    },
+    {
+      name: "行政法", icon: "行政",
+      problems: [
+        {
+          title: "行政裁量の逸脱濫用",
+          desc: "考慮すべき事情を考慮しなかった行政処分の違法性を構成する。",
+          facts: "県知事は、一定の裁量が認められる許可制度のもとで、申請者Xの営業許可申請を却下する処分をしたが、その判断過程で、法令上考慮すべきとされる周辺環境への影響等の事情を十分に考慮せず、専ら財政上の理由のみを重視して却下していた。Xはこの却下処分の取消しを求めたい。",
+          steps: [
+            { instruction:"この事例で、まず何が問題になるかを正しく指摘しているのはどれか？",
+              choices:[
+                {text:"本件では、県知事の裁量判断が、考慮すべき事情を十分に考慮しなかった点で、裁量権の範囲の逸脱又は濫用にあたらないかが問題となる。", correct:true},
+                {text:"本件では、Xに営業許可を求める法律上の利益（原告適格）が認められるかが問題となる。", correct:false, hint:"Xは処分の直接の名宛人であり、原告適格は当然に認められます。争点は処分の実体的な違法性（裁量権の逸脱濫用）です。"},
+                {text:"本件では、県の条例が法律の委任の範囲を超えているかが問題となる。", correct:false, hint:"条例の委任の範囲逸脱は事例上問題となっていません。争点は個別の裁量判断の当否です。"}
+              ]},
+            { instruction:"問題提起に対応する規範として、最も適切なものはどれか？",
+              choices:[
+                {text:"行政庁の裁量判断は、事実の基礎を欠く場合、法の趣旨・目的に反する動機に基づく場合、考慮すべき事項を考慮しなかった場合（他事考慮）、又は均衡を著しく欠く場合等には、裁量権の範囲の逸脱又は濫用として違法になると解する（行政事件訴訟法30条）。", correct:true},
+                {text:"行政裁量が認められる処分については、裁判所は一切審査することができないと解する。", correct:false, hint:"行政事件訴訟法30条はまさに裁量権の逸脱濫用がある場合の司法審査を認めています。「一切審査できない」という規範はこれと矛盾します。"},
+                {text:"行政庁は、法令の考慮要素にかかわらず自由な理由により処分を決定できると解する。", correct:false, hint:"考慮すべき事項を考慮しなかった場合（他事考慮）は裁量権の逸脱濫用にあたるとされており、「自由な理由でよい」という規範はこれと矛盾します。"}
+              ]},
+            { instruction:"規範を本件の事実にあてはめる記述として、最も適切なものはどれか？",
+              choices:[
+                {text:"本問では、県知事は法令上考慮すべきとされる周辺環境への影響等の事情を十分に考慮せず、専ら財政上の理由のみを重視して却下処分をしており、考慮すべき事項を考慮しなかった（他事考慮）といえる。したがって、この却下処分は裁量権の範囲を逸脱し違法である。", correct:true},
+                {text:"本問では、県知事に裁量権が認められる制度である以上、その判断過程を問わず処分は適法である。", correct:false, hint:"裁量が認められることと、その行使が適法であることとは別問題です。規範は考慮すべき事項を考慮したかという判断過程の検討を求めています。"},
+                {text:"本問では、Xの申請が却下されたという結果のみをもって、当然に違法と評価される。", correct:false, hint:"却下という結果だけでなく、規範が示す「判断過程における考慮の適否」を具体的に検討する必要があります。結果のみでの評価は不十分です。"}
+              ]}
+          ]
+        },
+        {
+          title: "原告適格（小田急高架訴訟型）",
+          desc: "都市計画事業の周辺住民に原告適格が認められるかを構成する。",
+          facts: "都が行った鉄道の連続立体交差化事業の認可について、事業地周辺に居住するXは、事業により生じる騒音・振動等の被害を理由に、この認可の取消訴訟を提起した。Xは事業地内に土地等の権利を有してはいなかった。Xに原告適格が認められるかが問題となった。",
+          steps: [
+            { instruction:"この事例で、まず何が問題になるかを正しく指摘しているのはどれか？",
+              choices:[
+                {text:"本件では、事業地内に権利を有しない周辺住民Xに、取消訴訟の原告適格（行政事件訴訟法9条）が認められるかが問題となる。", correct:true},
+                {text:"本件では、都市計画事業の認可自体に手続上の瑕疵があったかが問題となる。", correct:false, hint:"認可手続自体の瑕疵は事例上問題となっていません。争点はXがそもそも訴訟を提起できる資格（原告適格）を有するかです。"},
+                {text:"本件では、Xが事業により具体的な損害賠償を受けられるかが問題となる。", correct:false, hint:"損害賠償請求ではなく取消訴訟の話であり、争点は原告適格の有無です。"}
+              ]},
+            { instruction:"問題提起に対応する規範として、最も適切なものはどれか？",
+              choices:[
+                {text:"取消訴訟の原告適格は当該処分の取消しを求めるにつき「法律上の利益を有する者」に限られる（9条1項）。処分の相手方以外の第三者の原告適格の判断にあたっては、根拠法令の文言のみによらず、当該法令の趣旨及び目的並びに関係法令の趣旨及び目的をも参酌し、当該処分において考慮されるべき利益の内容及び性質等を考慮すると解する（9条2項）。", correct:true},
+                {text:"取消訴訟の原告適格は、処分の名宛人（相手方）にのみ認められ、第三者には一切認められないと解する。", correct:false, hint:"9条2項はまさに処分の相手方以外の第三者について原告適格が認められる場合があることを前提とした規定です。「一切認められない」とする規範はこれと矛盾します。"},
+                {text:"原告適格の判断は、根拠法令の文言のみに基づいて機械的に行われると解する。", correct:false, hint:"9条2項は「根拠法令の文言のみによることなく」関係法令の趣旨や利益の内容・性質を考慮すべきとしています。文言のみでの機械的判断を求める規範は条文と矛盾します。"}
+              ]},
+            { instruction:"規範を本件の事実にあてはめる記述として、最も適切なものはどれか？",
+              choices:[
+                {text:"本問では、都市計画法に加え関係法令（環境保全に関する法令等）の趣旨・目的を参酌し、都市計画事業の実施により騒音・振動等による健康又は生活環境に係る著しい被害を直接的に受けるおそれのある事業地周辺住民は、当該被害の内容・性質・程度に照らし、法律上保護された利益を有するといえる。したがって、Xにこのような被害のおそれが認められる限り、原告適格が認められる。", correct:true},
+                {text:"本問では、Xは事業地内に土地等の権利を有していない以上、原告適格は一切認められない。", correct:false, hint:"9条2項は根拠法令・関係法令の趣旨や利益の内容・性質等を踏まえた実質的な判断を求めており、「事業地内の権利の有無」という形式的な基準のみで結論を出すのは規範に沿っていません。"},
+                {text:"本問では、Xが被害を主張してさえいれば、その内容・程度を問わず当然に原告適格が認められる。", correct:false, hint:"規範は「被害の内容・性質・程度」を考慮すべきとしています。主張の有無のみで機械的に原告適格を認めるのは不十分なあてはめです。"}
+              ]}
+          ]
+        },
+        {
+          title: "国家賠償法1条の要件",
+          desc: "公務員の過失による違法な処分と国家賠償責任を構成する。",
+          facts: "税務署の職員は、必要な調査を怠り誤った事実認定に基づいて、Xに対し違法な課税処分を行った。Xはこの処分により損害を被ったとして、国に対して国家賠償を求めたい。",
+          steps: [
+            { instruction:"この事例で、まず何が問題になるかを正しく指摘しているのはどれか？",
+              choices:[
+                {text:"本件では、税務署職員の行為について、国家賠償法1条1項の要件（公権力の行使、故意・過失、違法性等）を満たし、国が賠償責任を負うかが問題となる。", correct:true},
+                {text:"本件では、当該課税処分について取消訴訟の出訴期間が経過していたかが問題となる。", correct:false, hint:"出訴期間の経過は取消訴訟固有の問題であり、国家賠償請求とは別の訴訟類型の話です。争点は国家賠償法1条の要件充足です。"},
+                {text:"本件では、Xの申告内容に誤りがあったかが問題となる。", correct:false, hint:"Xの申告内容の当否ではなく、税務署職員側の調査・認定における落ち度（過失）が問題となっています。"}
+              ]},
+            { instruction:"問題提起に対応する規範として、最も適切なものはどれか？",
+              choices:[
+                {text:"国家賠償法1条1項の責任が認められるには、①公権力の行使にあたる公務員の行為であること、②職務を行うについてなされたこと、③故意又は過失があること、④行為に違法性があること、⑤損害の発生、という要件を満たす必要があると解する。", correct:true},
+                {text:"国家賠償法1条の責任は、公務員に故意又は過失がなくても、損害が発生した事実のみで認められると解する。", correct:false, hint:"1条1項は「故意又は過失によつて」と明記しており、無過失責任ではありません。過失を不要とする規範は条文と矛盾します。"},
+                {text:"国家賠償法1条の責任主体は公務員個人であり、国や公共団体は責任を負わないと解する。", correct:false, hint:"1条1項は「国又は公共団体が、これを賠償する責に任ずる」と定めており、責任主体は国・公共団体です。公務員個人が直接責任を負うわけではありません。"}
+              ]},
+            { instruction:"規範を本件の事実にあてはめる記述として、最も適切なものはどれか？",
+              choices:[
+                {text:"本問では、税務署職員という公権力の行使にあたる公務員が、職務である課税処分に際して必要な調査を怠り誤った事実認定をしており、これは注意義務違反として過失が認められる。この過失により違法な課税処分がなされ、Xに損害が生じている以上、1条1項の要件を満たし、国は賠償責任を負う。", correct:true},
+                {text:"本問では、課税処分が結果的に誤っていたという事実のみで、当然に1条1項の全要件が満たされる。", correct:false, hint:"結果の誤りだけでなく、規範が示す「過失」（注意義務違反）の有無を具体的に検討する必要があります。結果のみでの結論は不十分なあてはめです。"},
+                {text:"本問では、税務署職員個人が処分を行った以上、国ではなく当該職員個人が賠償責任を負う。", correct:false, hint:"規範のとおり、国家賠償法1条1項の責任主体は国・公共団体であり、公務員個人ではありません。"}
+              ]}
+          ]
+        },
+        {
+          title: "行政指導の限界",
+          desc: "相手方の明確な拒絶後も継続された行政指導の適法性を構成する。",
+          facts: "市は、建築確認申請をした事業者Xに対し、周辺住民との協議を求める行政指導を行った。Xはこれに応じない意思を明確に示したが、市はその後も長期間にわたり建築確認処分を留保し続け、行政指導への協力を事実上強制するような対応を続けた。Xはこの対応の違法性を争いたい。",
+          steps: [
+            { instruction:"この事例で、まず何が問題になるかを正しく指摘しているのはどれか？",
+              choices:[
+                {text:"本件では、Xが行政指導に従わない意思を明確に表明した後も、市が建築確認処分を留保し続けた対応が、行政指導の限界を超え違法とならないかが問題となる。", correct:true},
+                {text:"本件では、建築確認が「処分」に該当するかが問題となる。", correct:false, hint:"建築確認が処分性を有すること自体は判例上確立しており、本件の争点ではありません。争点は行政指導の限界です。"},
+                {text:"本件では、Xの建築計画が建築基準法に適合していたかが問題となる。", correct:false, hint:"建築計画自体の法令適合性は事例上前提とされています。争点は行政指導の継続という対応の適法性です。"}
+              ]},
+            { instruction:"問題提起に対応する規範として、最も適切なものはどれか？",
+              choices:[
+                {text:"行政指導は相手方の任意の協力によってのみ実現されるものであり（行政手続法32条1項）、相手方が指導に従う意思がないことを真摯かつ明確に表明したにもかかわらず、行政指導を継続する等して、相手方の任意性を実質的に奪うような対応をとることは、行政指導の限界を超え違法となると解する。", correct:true},
+                {text:"行政指導には限界がなく、行政庁は相手方の意思にかかわらず、必要と考える限り継続することができると解する。", correct:false, hint:"行政指導は相手方の任意の協力を前提とする事実行為であり、相手方の意思を無視した継続には限界があります。「限界がない」とする規範は行政指導の本質と矛盾します。"},
+                {text:"行政指導に従わない相手方には、行政庁はいかなる不利益な取扱いをしてもよいと解する。", correct:false, hint:"行政手続法32条2項は、行政指導に従わないことを理由とする不利益取扱いを禁止しています。この規範は条文と矛盾します。"}
+              ]},
+            { instruction:"規範を本件の事実にあてはめる記述として、最も適切なものはどれか？",
+              choices:[
+                {text:"本問では、Xは行政指導に応じない意思を明確に示したにもかかわらず、市はその後も長期間にわたり建築確認処分を留保し続け、行政指導への協力を事実上強制するような対応を続けている。これはXの任意性を実質的に奪うものであり、行政指導の限界を超え違法である。", correct:true},
+                {text:"本問では、行政指導自体は適法に開始されているから、その後の継続の態様を問わず、市の対応は常に適法である。", correct:false, hint:"規範は「相手方が拒絶の意思を明確に示した後の継続」に着目しています。開始時点の適法性だけで、その後の継続態様を問わないとするのは規範に沿っていません。"},
+                {text:"本問では、Xが行政指導に従わなかった以上、市が確認処分を留保することは当然に適法である。", correct:false, hint:"行政手続法32条2項により、行政指導に従わないことを理由とする不利益な取扱い（本件では処分の留保）は禁止されています。"}
+              ]}
+          ]
+        },
+        {
+          title: "抗告訴訟の処分性",
+          desc: "行政指導のような事実行為に処分性が認められるかを構成する。",
+          facts: "市は、要綱に基づき、大規模な開発事業を行う事業者に対して、開発負担金の納付を求める指導を行っていた。この指導に従わなかった事業者に対しては、上下水道の給水契約の締結を拒否するという対応が慣行として確立していた。事業者Xは、給水契約締結拒否の対象とされたことについて、取消訴訟でこれを争いたいと考えている。",
+          steps: [
+            { instruction:"この事例で、まず何が問題になるかを正しく指摘しているのはどれか？",
+              choices:[
+                {text:"本件では、給水契約締結拒否という市の対応が、取消訴訟の対象となる「処分」（行政事件訴訟法3条2項）にあたるか（処分性の有無）が問題となる。", correct:true},
+                {text:"本件では、要綱自体が違法に制定されたかが問題となる。", correct:false, hint:"要綱の制定手続自体の瑕疵は事例上問題となっていません。争点は個別の給水契約締結拒否という行為が取消訴訟の対象となるかです。"},
+                {text:"本件では、Xの開発事業が都市計画法に違反していたかが問題となる。", correct:false, hint:"開発事業自体の適法性ではなく、それに対する市の対応（給水拒否）の法的性質が争点です。"}
+              ]},
+            { instruction:"問題提起に対応する規範として、最も適切なものはどれか？",
+              choices:[
+                {text:"処分性が認められるためには、当該行為が公権力の主体たる国又は地方公共団体が行う行為のうち、その行為によって直接国民の権利義務を形成し又はその範囲を確定することが法律上認められているものであることを要すると解する。単なる事実上の措置や行政指導への協力を求める手段にとどまる行為は、原則として処分性を欠くと解する。", correct:true},
+                {text:"行政主体が行う行為であれば、その性質を問わずすべて処分性が認められると解する。", correct:false, hint:"処分性は「直接国民の権利義務を形成・確定する法的効果」の有無で判断されます。行政主体の行為であることのみで一律に処分性を認める規範は不正確です。"},
+                {text:"要綱に基づく行政指導は、その内容を問わず常に処分性を有すると解する。", correct:false, hint:"行政指導は本来、相手方の任意の協力を求める事実行為であり、原則として処分性を欠くとされています。"}
+              ]},
+            { instruction:"規範を本件の事実にあてはめる記述として、最も適切なものはどれか？",
+              choices:[
+                {text:"本問では、給水契約締結拒否が、指導に従わない事業者に対して事実上の制裁として機能し、水道という生活に不可欠な役務の提供を実質的に強制する手段として用いられている場合には、単なる事実上の措置にとどまらず、法的効果を伴う処分としての性質を帯びる余地がある。この点を具体的事情に即して検討する必要がある。", correct:true},
+                {text:"本問では、給水契約の締結拒否は私法上の契約締結の自由の問題にすぎず、行政指導への協力強制の手段として用いられていたとしても、処分性は一切認められない。", correct:false, hint:"規範は「単なる事実上の措置にとどまる場合は処分性を欠く」としつつ、実質的な強制手段として機能している場合の検討の余地を含んでいます。契約という形式のみで一律に処分性を否定するのは不十分です。"},
+                {text:"本問では、要綱に基づく行政指導である以上、給水拒否も当然に処分性を有する。", correct:false, hint:"行政指導は原則として事実行為であり処分性を欠くのが原則です。「要綱に基づく」という理由のみで当然に処分性を認めるのは規範に沿っていません。"}
+              ]}
+          ]
+        }
+      ]
+    }
+  ];
+
+  const done = new Set();
+  let currentSubjectIdx = null;
+  let currentProblemIdx = null;
+  let stepIdx = 0;
+  let answered = false;
+  let wrongAttempted = false;
+  let startTime = null;
+  let timerInterval = null;
+
+  const mainArea = document.getElementById('mainArea');
+  const statsBar = document.getElementById('statsBar');
+
+  function totalProblems(){
+    let n = 0;
+    SUBJECTS.forEach(s => n += s.problems.length);
+    return n;
+  }
+
+  function renderStats(){
+    statsBar.innerHTML = `
+      <div class="stats-chip">全${totalProblems()}事例</div>
+      <div class="stats-chip">解決済：${done.size} / ${totalProblems()}</div>
+    `;
+  }
+
+  function renderMenu(){
+    if (timerInterval) clearInterval(timerInterval);
+    currentSubjectIdx = null; currentProblemIdx = null;
+    renderStats();
+    let html = '';
+    SUBJECTS.forEach((subj, si) => {
+      html += `<div class="subject-group">
+        <div class="subject-group-head">
+          <div class="sg-icon">${subj.icon}</div>
+          <h3>${subj.name}</h3>
+          <div class="sg-count">（${subj.problems.length}事例）</div>
+        </div>
+        <div class="problem-menu">`;
+      subj.problems.forEach((p, pi) => {
+        const key = si + '-' + pi;
+        html += `
+          <div class="problem-card ${done.has(key) ? 'done' : ''}" data-si="${si}" data-pi="${pi}">
+            <div class="done-badge">完了</div>
+            <div class="p-num">${pi+1}</div>
+            <div class="p-info">
+              <div class="p-title">${p.title}</div>
+              <div class="p-desc">${p.desc}</div>
+            </div>
+          </div>`;
+      });
+      html += `</div></div>`;
+    });
+    mainArea.innerHTML = html;
+    document.querySelectorAll('.problem-card').forEach(card => {
+      card.addEventListener('click', () => {
+        currentSubjectIdx = parseInt(card.dataset.si, 10);
+        currentProblemIdx = parseInt(card.dataset.pi, 10);
+        stepIdx = 0;
+        startTime = Date.now();
+        renderBoard();
+      });
+    });
+  }
+
+  function formatTime(ms){
+    const s = Math.floor(ms / 1000);
+    const m = Math.floor(s / 60);
+    const sec = s % 60;
+    return `${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+  }
+
+  function currentProblem(){
+    return SUBJECTS[currentSubjectIdx].problems[currentProblemIdx];
+  }
+
+  function renderBoard(){
+    const prob = currentProblem();
+    if (stepIdx >= prob.steps.length){
+      renderComplete();
+      return;
+    }
+    answered = false;
+    wrongAttempted = false;
+    const step = prob.steps[stepIdx];
+
+    let blueprintHtml = '<div class="blueprint">';
+    const slotLabels = ['問題提起', '規範定立', 'あてはめ'];
+    for (let i = 0; i < 3; i++){
+      if (i < stepIdx){
+        const chosenText = prob.steps[i].choices.find(c => c.correct).text;
+        blueprintHtml += `<div class="bp-slot filled"><span class="bp-label">${slotLabels[i]}</span>${chosenText}</div>`;
+      } else if (i === stepIdx) {
+        blueprintHtml += `<div class="bp-slot" id="activeSlot"><span class="bp-label">${slotLabels[i]}</span>（ここに組み込まれます）</div>`;
+      } else {
+        blueprintHtml += `<div class="bp-slot"><span class="bp-label">${slotLabels[i]}</span>（未組み立て）</div>`;
+      }
+    }
+    blueprintHtml += '</div>';
+
+    let choicesHtml = '';
+    step.choices.forEach((c, idx) => {
+      choicesHtml += `<button class="choice-btn" data-idx="${idx}">${c.text}</button>`;
+    });
+
+    mainArea.innerHTML = `
+      <div class="board">
+        <button class="back-link" id="backLink">← 事例一覧に戻る</button>
+        <div class="board-head">
+          <div>
+            <div class="p-tag">${SUBJECTS[currentSubjectIdx].name}｜${prob.title}</div>
+            <h2>STEP${stepIdx+1}｜${slotLabels[stepIdx]}</h2>
+          </div>
+          <div class="timer" id="timerDisplay">00:00</div>
+        </div>
+        ${stepIdx === 0 ? `<div class="fact-block"><span class="fact-label">事例</span>${prob.facts}</div>` : ''}
+        ${blueprintHtml}
+        <div class="step-label"><span class="step-num">${stepIdx+1}</span>この争点に対応するパーツを選んでください</div>
+        <div class="step-instruction">${step.instruction}</div>
+        <div class="choices" id="choicesBox">${choicesHtml}</div>
+        <div class="hint-card" id="hintCard">
+          <span class="hint-tag">なぜ違うか</span>
+          <div id="hintText"></div>
+        </div>
+      </div>
+    `;
+
+    document.getElementById('backLink').addEventListener('click', renderMenu);
+    document.querySelectorAll('.choice-btn').forEach(btn => {
+      btn.addEventListener('click', () => handleChoice(parseInt(btn.dataset.idx, 10)));
+    });
+
+    if (timerInterval) clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+      document.getElementById('timerDisplay').textContent = formatTime(Date.now() - startTime);
+    }, 1000);
+  }
+
+  function handleChoice(idx){
+    if (answered) return;
+    const prob = currentProblem();
+    const step = prob.steps[stepIdx];
+    const chosen = step.choices[idx];
+
+    if (chosen.correct){
+      answered = true;
+      document.querySelectorAll('.choice-btn').forEach((btn, i) => {
+        btn.disabled = true;
+        if (i === idx) btn.classList.add('correct');
+      });
+      const activeSlot = document.getElementById('activeSlot');
+      const slotLabels = ['問題提起', '規範定立', 'あてはめ'];
+      activeSlot.classList.add('filled');
+      activeSlot.innerHTML = `<span class="bp-label">${slotLabels[stepIdx]}</span>${chosen.text}`;
+      document.getElementById('hintCard').classList.remove('show');
+      setTimeout(() => { stepIdx++; renderBoard(); }, 900);
+    } else {
+      document.querySelectorAll('.choice-btn').forEach((btn, i) => {
+        if (i === idx){ btn.classList.add('wrong'); btn.disabled = true; }
+      });
+      document.getElementById('hintText').innerHTML = chosen.hint;
+      document.getElementById('hintCard').classList.add('show');
+    }
+  }
+
+  function renderComplete(){
+    if (timerInterval) clearInterval(timerInterval);
+    const key = currentSubjectIdx + '-' + currentProblemIdx;
+    done.add(key);
+    const prob = currentProblem();
+    const elapsed = Date.now() - startTime;
+
+    let faHtml = '';
+    const slotLabels = ['① 問題提起', '② 規範定立', '③ あてはめ'];
+    prob.steps.forEach((s, i) => {
+      const text = s.choices.find(c => c.correct).text;
+      faHtml += `<div class="fa-slot"><span class="fa-label">${slotLabels[i]}</span>${text}</div>`;
+    });
+
+    mainArea.innerHTML = `
+      <div class="board">
+        <button class="back-link" id="backLink2">← 事例一覧に戻る</button>
+        <div class="complete-screen show">
+          <div class="complete-title">完成｜${prob.title}</div>
+          <div class="complete-time">組み立て時間：${formatTime(elapsed)}</div>
+          <div class="final-answer">${faHtml}</div>
+          <button class="next-btn" id="toMenuBtn">他の事例に挑戦する →</button>
+        </div>
+      </div>
+    `;
+    document.getElementById('backLink2').addEventListener('click', renderMenu);
+    document.getElementById('toMenuBtn').addEventListener('click', renderMenu);
+  }
+
+  renderMenu();
+})();
+</script>
+
+</body>
+</html>
